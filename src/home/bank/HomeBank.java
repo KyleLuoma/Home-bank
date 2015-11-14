@@ -27,9 +27,17 @@ class HomeBank {
 
         HomeBank.loadDBDriver();
         HomeBank.setDBSystemDir();
-        HomeBank.createDB();
+        //HomeBank.createDB();
         Connection connection = HomeBank.connectToDB();
-        HomeBank.createStandardTables("TEST", connection);
+        
+        try {
+            if (connection.isValid(3)) {
+                HomeBank.createStandardTables("TEST", connection);
+            }
+        } catch (SQLException conn) {
+            System.out.println("There was a problem connecting to the DB.");
+        }
+        
 
     }
 
@@ -79,8 +87,9 @@ class HomeBank {
             dbConnection = DriverManager.getConnection(stringURL);
             System.out.println("Connected to database");
         } catch (SQLException sqle) {
-            sqle.printStackTrace();
-        }
+            //sqle.printStackTrace();
+            System.out.println("Unable to connect to the database. Check to see if it's open.");
+            }
         return dbConnection;
     }
 
