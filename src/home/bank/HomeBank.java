@@ -13,10 +13,8 @@ import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.DatabaseMetaData;
 
-// Simple version control check 112043NOV15
-//IT WORKS!!! Sent from surface pro 3
-//or does it? Sent from desktop
-//YES!!!
+
+
 
 /**
  *
@@ -103,7 +101,11 @@ class HomeBank {
         
         String createAccountTableQuery
                 = "CREATE table " + accountName + ".ACCOUNTS (\n"
-                + "ID          INTEGER NOT NULL \n"
+                + "ID          INTEGER NOT NULL, \n"
+                + "HOLDERID    INTEGER NOT NULL, \n"
+                + "MGRID       INTEGER NOT NULL, \n"
+                + "BALANCE     FLOAT, \n"
+                + "DATECREATED DATE \n"
                 + ")";
 
         String createTransactionTableQuery 
@@ -121,7 +123,7 @@ class HomeBank {
             
             if (checkTable("USERS", dbConnection, accountName) == false) {
 
-                System.out.println("Trying to create a user table");
+                System.out.println("Creating user table");
                 statement = dbConnection.createStatement();
                 statement.execute(createUserTableQuery);
             
@@ -138,7 +140,7 @@ class HomeBank {
         
             if (checkTable("ACCOUNTS", dbConnection, accountName) == false) {
                 
-                System.out.println("Trying to create an account table");
+                System.out.println("Creating account table");
                 statement = dbConnection.createStatement();
                 statement.execute(createAccountTableQuery);
                 
@@ -155,7 +157,7 @@ class HomeBank {
         
             if (checkTable("TRANSACTIONS", dbConnection, accountName) == false) {
                 
-                System.out.println("Trying to create a transactions table");
+                System.out.println("Creating transactions table");
                 statement = dbConnection.createStatement();
                 statement.execute(createTransactionTableQuery);
                 
@@ -184,8 +186,8 @@ class HomeBank {
             
         } catch (SQLException ctFail) {
             
-            System.out.println("Table check method failed");
-            System.out.println(ctFail);
+            System.out.println("There was no table named " + tableName);
+            //System.out.println(ctFail);
             tableExists = false;
                         
         }
