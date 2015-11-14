@@ -15,6 +15,8 @@ import java.sql.DatabaseMetaData;
 
 // Simple version control check 112043NOV15
 //IT WORKS!!! Sent from surface pro 3
+//or does it? Sent from desktop
+
 /**
  *
  * @author KYLE
