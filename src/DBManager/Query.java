@@ -5,6 +5,7 @@
  */
 package DBManager;
 
+import java.sql.Array;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
@@ -17,7 +18,67 @@ import java.sql.Statement;
  */
 public class Query {
     
-     private void createStandardTables(String accountName, Connection dbConnection) {
+    private Connection dbConnection = null;
+        
+    private Statement statement = null;
+    
+    private ResultSet result = null;
+        
+        
+    
+    public Query(Connection connectionIn) {
+        
+        try {
+        
+            dbConnection = connectionIn;
+            
+            statement = dbConnection.createStatement();
+            
+            result = statement.getResultSet();
+            
+            System.out.println("Initializing Query object");
+            
+        } catch(SQLException e) {
+            
+            System.out.println(e);
+            
+        }
+    
+    }
+    
+    
+    public int getHighestTransactionID(String accountName) {
+        // Returns highest transaction ID. Use for generating new transaction to
+        // avoid collisions.
+        
+        Array resultString = null;
+        
+        String findHighestTransactionIDQuery 
+                = "SELECT ID FROM TEST.TRANSACTIONS ORDER BY ID DESC";
+        
+        int accountID = 0;
+        
+        try {
+        
+            result = statement.executeQuery(findHighestTransactionIDQuery);
+            
+            if(result.next()) {
+                
+                accountID = result.getInt(1);
+                
+            }
+            
+            } catch(SQLException e) {
+                    
+                System.out.println(e);
+
+            }
+        
+        return accountID;
+        
+    }
+    
+    public void createStandardTables(String accountName, Connection dbConnection) {
         // checks for existence of required tables and creates new tables if none exist.
         // This method is currently a test bed for the javadb API. Needs to be 
         // reconfigured for it's actual purpose.

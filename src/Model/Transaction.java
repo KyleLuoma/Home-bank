@@ -9,6 +9,16 @@ package Model;
  *
  * @author Administrator
  */
-public class Transactions {
+public class Transaction {
+    
+    private double transactionAmount;
+    
+    private String fromAccount;
+    
+    private String toAccount;
+    
+    private int transactionID;
+
+    
     
 }

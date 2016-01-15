@@ -28,14 +28,13 @@ class HomeBank {
         Connect homeDB = new Connect(); //Connects to the homebank DB
         
         Connection connection = homeDB.getConnection();
-
-
-       
         
+        Query query = new Query(connection);
+        
+        System.out.println(query.getHighestTransactionID("TEST"));
 
     }
-
     
-    }
+}
     
 
