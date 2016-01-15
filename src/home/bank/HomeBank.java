@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.DatabaseMetaData;
-
+import DBManager.*;
 
 /**
  *
@@ -24,6 +24,11 @@ class HomeBank {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        
+        Connect homeDB = new Connect(); //Connects to the homebank DB
+        
+        Connection connection = homeDB.getConnection();
+
 
        
         
@@ -33,4 +38,4 @@ class HomeBank {
     
     }
     
-}
+
