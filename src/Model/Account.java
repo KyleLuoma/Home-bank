@@ -5,21 +5,71 @@
  */
 package Model;
 
+import java.sql.Date;
+
 /**
  *
  * @author Administrator
  */
 public class Account {
+      
+    private int ID;
     
-    String accountName = "standard";
+    private int holderID;
     
-    String createAccountTableQuery =
-                 "CREATE table " + accountName + ".ACCOUNTS (\n"
-                + "ID          INTEGER NOT NULL, \n"
-                + "HOLDERID    INTEGER NOT NULL, \n"
-                + "MGRID       INTEGER NOT NULL, \n"
-                + "BALANCE     FLOAT, \n"
-                + "DATECREATED DATE \n"
-                + ")";
+    private int managerID;
     
+    private double balance = 1;
+    
+    private Date dateCreated;
+    
+    private String userAccount = "";
+        
+    public Account (int lastAccountID, int holderID, int managerID, String userAccount) {
+        
+        this.ID = lastAccountID += 1;
+        
+        this.holderID = holderID;
+        
+        this.managerID = managerID;
+        
+        this.userAccount = userAccount;
+        
+        dateCreated = new Date(new java.util.Date().getTime());
+        
+        System.out.println("Account created on: " + dateCreated.toString());
+        
+    }
+    
+    public int getID() {
+        
+        return this.ID;
+        
+    }
+    
+    public String getPutQuery() {
+        //generates a SQL instruction to insert a new account into the database.
+        
+        String putAccount 
+                = "INSERT INTO " + userAccount + ".ACCOUNTS ("                
+                    + "\"ID\" , "
+                    + "\"HOLDERID\" , "
+                    + "\"MGRID\" , "
+                    + "\"BALANCE\" , "
+                    + "\"DATECREATED\""
+                    + ")"                
+                + " VALUES ( "                
+                    + this.ID + " , " 
+                    + this.holderID + " , "
+                    + this.managerID + " , "
+                    + this.balance + " , "
+                    + "\'" + this.dateCreated.toString() + "\'"
+                    + ") ";
+        
+        System.out.println(putAccount);
+        
+        return putAccount;
+        
+    }
+        
 }

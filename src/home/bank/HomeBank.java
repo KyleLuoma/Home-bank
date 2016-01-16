@@ -7,6 +7,7 @@ package home.bank;
 
 import java.sql.Connection;
 import DBManager.*;
+import Model.Account;
 import Model.Transaction;
 
 /**
@@ -26,18 +27,25 @@ class HomeBank {
         
         BankQuery query = new BankQuery(connection);
         
+        Account account = new Account(
+                query.getHighestID("TEST", "ACCOUNTS"), 
+                1234, 4321, "TEST"
+        );
+        
         query.createStandardTables("TEST");
         
-        System.out.println(query.getHighestTransactionID("TEST"));
+        System.out.println(query.getHighestID("TEST", "TRANSACTIONS"));
         
         Transaction testTransaction = new Transaction(
-                query.getHighestTransactionID("TEST"),
+                query.getHighestID("TEST", "TRANSACTIONS"),
                 4, 4, 4, 4, 100.50, "TEST"        
         );
         
         System.out.println(testTransaction.getID());
         
         query.putTransaction(testTransaction, "TEST");
+        
+        query.putAccount(account, "TEST");
 
     }
     

@@ -5,6 +5,7 @@
  */
 package DBManager;
 
+import Model.Account;
 import Model.Transaction;
 import java.sql.Array;
 import java.sql.Connection;
@@ -49,8 +50,6 @@ public class BankQuery {
     
     public void putTransaction(Transaction transaction, String accountName) {
         
-        int transactionID = transaction.getID();
-        
         String putTransaction = transaction.getPutQuery();
         
         try {
@@ -63,23 +62,40 @@ public class BankQuery {
             
         }
         
-    }    
+    }
+
+    public void putAccount(Account account, String accountName) {
+        
+        String putAccount = account.getPutQuery();
+        
+        try {
+            
+            System.out.println("Trying to put a new account into the DB");
+            statement.execute(putAccount);
+            
+        } catch (SQLException e) {
+            
+            System.out.println("It didn't work: " + e);
+            
+        }
+        
+    }
     
-    public int getHighestTransactionID(String accountName) {
+    public int getHighestID(String accountName, String accountType) {
         
         // Returns highest transaction ID. Use for generating new transaction to
         // avoid collisions.
         
         Array resultString = null;
         
-        String findHighestTransactionIDQuery 
-                = "SELECT ID FROM TEST.TRANSACTIONS ORDER BY ID DESC";
+        String findHighestIDQuery 
+                = "SELECT ID FROM TEST." + accountType + " ORDER BY ID DESC";
         
         int accountID = 0;
         
         try {
         
-            result = statement.executeQuery(findHighestTransactionIDQuery);
+            result = statement.executeQuery(findHighestIDQuery);
             
             if(result.next()) {
                 
