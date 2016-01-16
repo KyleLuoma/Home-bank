@@ -5,14 +5,9 @@
  */
 package home.bank;
 
-import java.io.File;
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.ResultSet;
-import java.sql.DatabaseMetaData;
 import DBManager.*;
+import Model.Transaction;
 
 /**
  *
@@ -29,9 +24,20 @@ class HomeBank {
         
         Connection connection = homeDB.getConnection();
         
-        Query query = new Query(connection);
+        BankQuery query = new BankQuery(connection);
+        
+        query.createStandardTables("TEST");
         
         System.out.println(query.getHighestTransactionID("TEST"));
+        
+        Transaction testTransaction = new Transaction(
+                query.getHighestTransactionID("TEST"),
+                4, 4, 4, 4, 100.50, "TEST"        
+        );
+        
+        System.out.println(testTransaction.getID());
+        
+        query.putTransaction(testTransaction, "TEST");
 
     }
     

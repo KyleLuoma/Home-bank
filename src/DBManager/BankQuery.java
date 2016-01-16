@@ -5,6 +5,7 @@
  */
 package DBManager;
 
+import Model.Transaction;
 import java.sql.Array;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -16,7 +17,7 @@ import java.sql.Statement;
  *
  * @author Administrator
  */
-public class Query {
+public class BankQuery {
     
     private Connection dbConnection = null;
         
@@ -26,7 +27,7 @@ public class Query {
         
         
     
-    public Query(Connection connectionIn) {
+    public BankQuery(Connection connectionIn) {
         
         try {
         
@@ -46,8 +47,26 @@ public class Query {
     
     }
     
+    public void putTransaction(Transaction transaction, String accountName) {
+        
+        int transactionID = transaction.getID();
+        
+        String putTransaction = transaction.getPutQuery();
+        
+        try {
+            
+            statement.execute(putTransaction);
+            
+        } catch (SQLException e) {
+            
+            System.out.println(e);
+            
+        }
+        
+    }    
     
     public int getHighestTransactionID(String accountName) {
+        
         // Returns highest transaction ID. Use for generating new transaction to
         // avoid collisions.
         
@@ -78,7 +97,7 @@ public class Query {
         
     }
     
-    public void createStandardTables(String accountName, Connection dbConnection) {
+    public void createStandardTables(String accountName) {
         // checks for existence of required tables and creates new tables if none exist.
         // This method is currently a test bed for the javadb API. Needs to be 
         // reconfigured for it's actual purpose.
@@ -103,11 +122,11 @@ public class Query {
         String createTransactionTableQuery 
                 = "CREATE table " + accountName + ".TRANSACTIONS (\n"
                 + "ID               INTEGER NOT NULL, \n"
-                + "FROMACCOUNTID    INTEGER NOT NULL, \n"
-                + "TOACCOUNTID      INTEGER NOT NULL, \n"
-                + "AMOUNT           FLOAT NOT NULL,   \n"
-                + "DATE             DATE NOT NULL,    \n"
-                + "TIME             TIME NOT NULL    \n"
+                + "FROMACCOUNTID    INTEGER, \n"
+                + "TOACCOUNTID      INTEGER, \n"
+                + "AMOUNT           FLOAT,   \n"
+                + "DATE             DATE,    \n"
+                + "TIME             TIME    \n"
                 + ")";
         
         Statement statement = null;
