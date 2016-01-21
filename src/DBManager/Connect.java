@@ -36,8 +36,6 @@ public class Connect {
         
         this.loadDBDriver();
         
-        this.setDBSystemDir();
-        
         this.createDB();
         
         dbConnection = this.connectToDB();
@@ -100,27 +98,6 @@ public class Connect {
             
         }
     }
-
-    
-    private void setDBSystemDir() {
-        // Decide on the db system directory: <userhome>/.bankdb/
-        
-        String userHomeDir = System.getProperty("user.home", ".");
-        
-        String systemDir = userHomeDir + "/.bankdb";
-
-        // Create a db system directory
-        new File(systemDir).mkdir();
-
-        // Set the db system directory
-        System.setProperty("derby.system.home", systemDir);
-
-        System.out.println("system directory set");
-        System.out.println("User Home Directory is " + userHomeDir);
-        System.out.println("System Directory is " + systemDir);
-        
-    }
-
     
     private void createDB() {
         //create the database

@@ -50,6 +50,22 @@ public class Account {
         
     }
     
+    public Account (int accountID, int holderID, String userName, int managerID,
+            double balance, Date dateCreated) {
+        
+        this.ID = accountID;
+        
+        this.holderID = holderID;
+        
+        this.userName = userName;
+        
+        this.managerID = managerID;
+        
+        this.dateCreated = dateCreated;
+        
+        this.balance = balance;
+        
+    }
     
     public Account (int accountID, ResultSet accountInformation, BankQuery query) {
         //Retrieves an existing account from the database.

@@ -9,6 +9,7 @@ import Model.*;
 import java.sql.Array;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -85,10 +86,53 @@ public class BankQuery {
         
     }
     
-    public ResultSet getAccount(int accountID, String accountName) {
+    public Account getAccountObject(int accountID, String userName) {
+        
+        result = this.getAccountData(accountID, userName);
+        
+        int holderID = 0; 
+        
+        int managerID = 0;
+        
+        double balance = 0;
+        
+        Date dateCreated = null;
+        
+        try {
+            
+            if(result.next()) {
+                
+                holderID = result.getInt(2);
+                
+                userName = this.lookupUserName(holderID);
+                
+                managerID = result.getInt(3);
+                
+                balance = result.getDouble(4);
+                
+                dateCreated = result.getDate(5);
+                
+            }
+            
+        } catch(SQLException e) {
+            
+            System.out.println(e);
+            
+            System.out.println("There was a problem with BankQuery.getAccountObject");
+                                   
+        }
+        
+        Account returnAccount = new Account(accountID, holderID, userName, 
+        managerID, balance, dateCreated);
+        
+        return returnAccount;
+        
+    }
+    
+    public ResultSet getAccountData(int accountID, String userName) {
         
         String getAccountQuery 
-                = "SELECT * FROM " + accountName + ".ACCOUNTS WHERE"
+                = "SELECT * FROM " + userName + ".ACCOUNTS WHERE"
                 + " ID = " + accountID;
         
         ResultSet accountResult = null;

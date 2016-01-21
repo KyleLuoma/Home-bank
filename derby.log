@@ -1,13 +1,13 @@
 ----------------------------------------------------------------
-Wed Jan 20 23:25:00 PST 2016:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.11.1.2 - (1629631): instance a816c00e-0152-6312-7516-0000072831e8 
-on database directory C:\Java Projects\Home-bank\HomeBankDB with class loader sun.misc.Launcher$AppClassLoader@5e2de80c 
-Loaded from file:/C:/Program%20Files/Java/jdk1.8.0_65/db/lib/derby.jar
+Thu Jan 21 12:43:07 PST 2016:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.11.1.2 - (1629631): instance a816c00e-0152-65ed-28f9-000007288288 
+on database directory C:\Java Projects\home bank\HomeBankDB with class loader sun.misc.Launcher$AppClassLoader@5e2de80c 
+Loaded from file:/C:/Program%20Files/Java/jdk1.8.0_60/db/lib/derby.jar
 java.vendor=Oracle Corporation
-java.runtime.version=1.8.0_65-b17
-user.dir=C:\Java Projects\Home-bank
-os.name=Windows 7
+java.runtime.version=1.8.0_60-b27
+user.dir=C:\Java Projects\home bank
+os.name=Windows 8.1
 os.arch=amd64
-os.version=6.1
-derby.system.home=C:\Users\Administrator/.bankdb
+os.version=6.3
+derby.system.home=null
 Database Class Loader started - derby.database.classpath=''

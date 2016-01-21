@@ -34,10 +34,10 @@ class HomeBank {
         
         String userName = activeUser.getUserName();
         
-        query.putUser(activeUser);
+        //query.putUser(activeUser);
         
         //Check if required tables exist and create new tables if none.
-        query.createStandardTables(userName);
+        //query.createStandardTables(userName);
         
         //Create a new account using dummy data; assigns a new account number to the object
         Account account = new Account(
@@ -45,11 +45,8 @@ class HomeBank {
         );
         
         //Create an account object that retrieves existing data from the database
-        Account openAccount = new Account(
-                2,
-                query.getAccount(2, userName),
-                query
-        );
+        Account openAccount = query.getAccountObject(2, userName);
+        
         
         System.out.println(query.getHighestID(userName, "TRANSACTIONS"));
         
