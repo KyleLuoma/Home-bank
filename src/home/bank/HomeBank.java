@@ -7,8 +7,9 @@ package home.bank;
 
 import java.sql.Connection;
 import DBManager.*;
-import Model.Account;
-import Model.Transaction;
+import Model.*;
+import java.sql.ResultSet;
+
 
 /**
  *
@@ -27,25 +28,48 @@ class HomeBank {
         
         BankQuery query = new BankQuery(connection);
         
+        //Create a new user:
+        User activeUser = new User( "Luoma" , "Cody" , "child" , 1 , query );
+        
+        String userName = activeUser.getUserName();
+        
+        query.putUser(activeUser);
+        
+        //Check if required tables exist and create new tables if none.
+        query.createStandardTables(userName);
+        
+        //Create a new account using dummy data; assigns a new account number to the object
         Account account = new Account(
-                query.getHighestID("TEST", "ACCOUNTS"), 
-                1234, 4321, "TEST"
+                query, 2, 2
         );
         
-        query.createStandardTables("TEST");
+        //Create an account object that retrieves existing data from the database
+        Account openAccount = new Account(
+                2,
+                query.getAccount(2, userName),
+                query
+        );
         
-        System.out.println(query.getHighestID("TEST", "TRANSACTIONS"));
+        System.out.println(query.getHighestID(userName, "TRANSACTIONS"));
         
         Transaction testTransaction = new Transaction(
-                query.getHighestID("TEST", "TRANSACTIONS"),
-                4, 4, 4, 4, 100.50, "TEST"        
+                query, 4, 4, 4, 4, 100.50, userName        
         );
         
         System.out.println(testTransaction.getID());
         
-        query.putTransaction(testTransaction, "TEST");
+        //test of method that puts a new transaction into the database
+        query.putTransaction(testTransaction); 
         
-        query.putAccount(account, "TEST");
+        //test of method that puts an account instance into the database
+        query.putAccount(account);
+        
+        System.out.println(openAccount.getID());
+        
+        System.out.println("" + BankQuery.usageCheck() + " instances of BankQuery class.");
+        
+        System.out.println("" + Connect.usageCheck() + " connections to database");
+                
 
     }
     

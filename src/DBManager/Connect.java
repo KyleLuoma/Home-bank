@@ -50,6 +50,12 @@ public class Connect {
         return dbConnection;
         
     }
+    
+    public static int usageCheck() {
+        
+        return numberOfConnections;
+        
+    }
      
     
     private Connection connectToDB() {

@@ -5,6 +5,8 @@
  */
 package Model;
 
+import DBManager.BankQuery;
+
 /**
  *
  * @author Administrator
@@ -23,22 +25,21 @@ public class Transaction {
     
     private int transactionID;
     
-    private String userAccount;
+    private String userAccount;   
     
-    
-    public Transaction (int lastTransactionID, int fromAccount, int toAccount,
+    public Transaction ( BankQuery query, int fromAccount, int toAccount,
                          int fromUser, int toUser, double transactionAmount,
                          String userAccount) {
         
-        this.transactionID = lastTransactionID + 1;
+        this.transactionID = query.getHighestID(userAccount, "TRANSACTIONS") + 1;
         
         this.fromAccount = fromAccount;
         
         this.toAccount = toAccount;
         
-        this.fromUser = fromUser;
+        this.fromUser = fromUser; //transitive dependency. Replace with call to getUser
         
-        this.toUser = toUser;
+        this.toUser = toUser; //transitive. see above.
         
         this.transactionAmount = transactionAmount;
         

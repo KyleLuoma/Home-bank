@@ -5,8 +5,7 @@
  */
 package DBManager;
 
-import Model.Account;
-import Model.Transaction;
+import Model.*;
 import java.sql.Array;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -14,8 +13,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+
 /**
- *
+ * BankQuery class, singleton class used to handle all communications with the
+ * bank database.
+ * 
  * @author Administrator
  */
 public class BankQuery {
@@ -25,8 +27,8 @@ public class BankQuery {
     private Statement statement = null;
     
     private ResultSet result = null;
-        
-        
+    
+    private static int usageCounter = 0; 
     
     public BankQuery(Connection connectionIn) {
         
@@ -45,10 +47,12 @@ public class BankQuery {
             System.out.println(e);
             
         }
+        
+        usageCounter++;
     
     }
     
-    public void putTransaction(Transaction transaction, String accountName) {
+    public void putTransaction(Transaction transaction) {
         
         String putTransaction = transaction.getPutQuery();
         
@@ -64,7 +68,7 @@ public class BankQuery {
         
     }
 
-    public void putAccount(Account account, String accountName) {
+    public void putAccount(Account account) {
         
         String putAccount = account.getPutQuery();
         
@@ -81,6 +85,101 @@ public class BankQuery {
         
     }
     
+    public ResultSet getAccount(int accountID, String accountName) {
+        
+        String getAccountQuery 
+                = "SELECT * FROM " + accountName + ".ACCOUNTS WHERE"
+                + " ID = " + accountID;
+        
+        ResultSet accountResult = null;
+        
+        Statement accountStatement = null;
+        
+        try {
+            
+            accountStatement = dbConnection.createStatement();
+            
+            accountResult = accountStatement.executeQuery(getAccountQuery);
+            
+        } catch (SQLException e) {
+            
+            System.out.println(e);
+            
+        }
+        
+        return accountResult;
+        
+    }
+    
+    public void putUser(User user) {
+                
+        String putUser = user.getPutQuery();
+        
+        try {
+        
+            System.out.println("Tring to put a new user into the DB. \n"
+                               + "sending SQL command: " + putUser + " to DB.");
+            
+            statement.execute(putUser);
+            
+        } catch(SQLException e) {
+            
+            System.out.println(e);
+            
+        }
+        
+    }
+    
+    public ResultSet getUser(int userID) {
+        
+        String getUserQuery
+                = "SELECT * FROM MAIN.USERS WHERE ID = " + userID;
+        
+        try {
+            
+            result = statement.executeQuery(getUserQuery);
+            
+        } catch(SQLException e) {
+            
+            System.out.println(e);
+            
+        }
+        
+        return result;
+        
+    }
+    
+    public String lookupUserName(int userID) {
+        
+        String lookupUserNameQuery 
+                = "SELECT USERNAME FROM MAIN.USERS WHERE ID = " + userID;
+        
+        String userName = "";
+        
+        try {
+            
+            result = statement.executeQuery(lookupUserNameQuery);
+            
+            if(result.next()) {
+                
+                userName = result.getString(1);
+                
+            } else {
+                
+                System.out.println("No users found in database");
+                
+            }
+            
+        } catch(SQLException e) {
+            
+            System.out.println(e);
+            
+        }
+        
+        return userName;
+        
+    }
+    
     public int getHighestID(String accountName, String accountType) {
         
         // Returns highest transaction ID. Use for generating new transaction to
@@ -89,7 +188,7 @@ public class BankQuery {
         Array resultString = null;
         
         String findHighestIDQuery 
-                = "SELECT ID FROM TEST." + accountType + " ORDER BY ID DESC";
+                = "SELECT ID FROM " + accountName + "." + accountType + " ORDER BY ID DESC";
         
         int accountID = 0;
         
@@ -100,6 +199,13 @@ public class BankQuery {
             if(result.next()) {
                 
                 accountID = result.getInt(1);
+                
+            } else {
+                
+                System.out.println("Could not find an ID in table " 
+                                    + accountName + "." + accountType);
+                
+                accountID = 0;
                 
             }
             
@@ -113,21 +219,42 @@ public class BankQuery {
         
     }
     
-    public void createStandardTables(String accountName) {
+    public ResultSet getAccountTransactions(String userName) {
+        
+        String getTransactionQuery 
+                = "SELECT * FROM " + userName + ".TRANSACTIONS"
+                + "ORDER BY ID";
+        
+        try {
+            
+            result = statement.executeQuery(getTransactionQuery);
+            
+        } catch (SQLException e) {
+            
+            System.out.println(e);
+            
+        }
+        
+        return result;
+        
+    } 
+    
+    public void createStandardTables(String userName) {
         // checks for existence of required tables and creates new tables if none exist.
         // This method is currently a test bed for the javadb API. Needs to be 
         // reconfigured for it's actual purpose.
               
         String createUserTableQuery
-                = "CREATE table " + accountName + ".USERS (\n"
+                = "CREATE table MAIN.USERS (\n"
                 + "ID          INTEGER NOT NULL, \n"
+                + "USERNAME    VARCHAR(30), \n"
                 + "LASTNAME    VARCHAR(30), \n"
                 + "FIRSTNAME   VARCHAR(30), \n"
                 + "ROLE        VARCHAR(10), \n"
                 + "LEVEL       INTEGER )";
         
         String createAccountTableQuery
-                = "CREATE table " + accountName + ".ACCOUNTS (\n"
+                = "CREATE table " + userName + ".ACCOUNTS (\n"
                 + "ID          INTEGER NOT NULL, \n"
                 + "HOLDERID    INTEGER NOT NULL, \n"
                 + "MGRID       INTEGER NOT NULL, \n"
@@ -136,7 +263,7 @@ public class BankQuery {
                 + ")";
 
         String createTransactionTableQuery 
-                = "CREATE table " + accountName + ".TRANSACTIONS (\n"
+                = "CREATE table " + userName + ".TRANSACTIONS (\n"
                 + "ID               INTEGER NOT NULL, \n"
                 + "FROMACCOUNTID    INTEGER, \n"
                 + "TOACCOUNTID      INTEGER, \n"
@@ -153,7 +280,7 @@ public class BankQuery {
         
         try {
             
-            if (checkTable("USERS", dbConnection, accountName) == false) {
+            if (checkTable("USERS", dbConnection, "MAIN") == false) {
 
                 System.out.println("Creating user table");
                 statement = dbConnection.createStatement();
@@ -170,7 +297,7 @@ public class BankQuery {
             
         try {
         
-            if (checkTable("ACCOUNTS", dbConnection, accountName) == false) {
+            if (checkTable("ACCOUNTS", dbConnection, userName) == false) {
                 
                 System.out.println("Creating account table");
                 statement = dbConnection.createStatement();
@@ -187,7 +314,7 @@ public class BankQuery {
             
         try {
         
-            if (checkTable("TRANSACTIONS", dbConnection, accountName) == false) {
+            if (checkTable("TRANSACTIONS", dbConnection, userName) == false) {
                 
                 System.out.println("Creating transactions table");
                 statement = dbConnection.createStatement();
@@ -203,8 +330,8 @@ public class BankQuery {
         }
     }
     
-    private boolean checkTable(String tableName, Connection connection, String accountName) {
-        // Checks for the existence of a table within a database and returns a boolean
+    private boolean checkTable(String tableName, Connection connection, String userName) {
+        // Checks for the existence of a table within a database
         
         boolean tableExists;
                 
@@ -212,7 +339,7 @@ public class BankQuery {
             
             Statement statement = connection.createStatement();
             DatabaseMetaData tableCheck = connection.getMetaData();
-            ResultSet tableVerify = tableCheck.getTables(null, accountName, tableName, null);
+            ResultSet tableVerify = tableCheck.getTables(null, userName, tableName, null);
             tableVerify.next();            
             tableExists = tableName.equals(tableVerify.getString("TABLE_NAME"));
             
@@ -225,6 +352,12 @@ public class BankQuery {
         }
         
         return tableExists;
+        
+    }
+    
+    public static int usageCheck() {
+        
+        return usageCounter;
         
     }
     

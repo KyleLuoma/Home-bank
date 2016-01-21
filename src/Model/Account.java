@@ -6,6 +6,9 @@
 package Model;
 
 import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import DBManager.BankQuery;
 
 /**
  *
@@ -23,21 +26,59 @@ public class Account {
     
     private Date dateCreated;
     
-    private String userAccount = "";
+    private String userName = "";
+    
+    private ResultSet transactionList = null;
+            
+    
+    public Account (BankQuery query, int holderID, int managerID) {
+        //Generates a new account, with a unique ID.
         
-    public Account (int lastAccountID, int holderID, int managerID, String userAccount) {
+        this.userName = query.lookupUserName(holderID);
         
-        this.ID = lastAccountID += 1;
+        System.out.println("Account username = " + this.userName);
+        
+        this.ID = query.getHighestID(userName, "ACCOUNTS") + 1;
         
         this.holderID = holderID;
         
         this.managerID = managerID;
         
-        this.userAccount = userAccount;
-        
         dateCreated = new Date(new java.util.Date().getTime());
         
         System.out.println("Account created on: " + dateCreated.toString());
+        
+    }
+    
+    
+    public Account (int accountID, ResultSet accountInformation, BankQuery query) {
+        //Retrieves an existing account from the database.
+        
+        try {
+            
+            accountInformation.next();
+                    
+            this.ID = accountID;
+                                    
+            this.holderID = accountInformation.getInt(2);
+            
+            this.userName = query.lookupUserName(holderID);
+            
+            this.managerID = accountInformation.getInt(3);
+            
+            this.balance = accountInformation.getDouble(4);
+            
+            this.dateCreated = accountInformation.getDate(5);
+            
+        } catch (SQLException e) {
+            
+            System.out.println("No accounts found!!!");
+            
+            System.out.println(e);
+            
+        }
+        
+        
         
     }
     
@@ -51,14 +92,14 @@ public class Account {
         //generates a SQL instruction to insert a new account into the database.
         
         String putAccount 
-                = "INSERT INTO " + userAccount + ".ACCOUNTS ("                
+                = "INSERT INTO " + userName + ".ACCOUNTS ("                
                     + "\"ID\" , "
                     + "\"HOLDERID\" , "
                     + "\"MGRID\" , "
                     + "\"BALANCE\" , "
                     + "\"DATECREATED\""
                     + ")"                
-                + " VALUES ( "                
+                + " VALUES ("                
                     + this.ID + " , " 
                     + this.holderID + " , "
                     + this.managerID + " , "
