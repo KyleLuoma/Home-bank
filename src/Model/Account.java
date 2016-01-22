@@ -104,6 +104,32 @@ public class Account {
         
     }
     
+    public String getUserName() {
+        
+        return this.userName;
+        
+    }
+    
+    public Date getDateCreated() {
+        
+        return this.dateCreated;
+        
+    }
+    
+    public int getHolderID() {
+        
+        return this.holderID;
+    
+    }
+    
+    public int getManagerID() {
+        
+        return this.managerID;
+        
+    }
+    
+    
+    
     public String getPutQuery() {
         //generates a SQL instruction to insert a new account into the database.
         

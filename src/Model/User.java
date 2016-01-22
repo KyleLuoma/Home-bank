@@ -52,31 +52,22 @@ public class User {
         
     }
     
-    public User(int userID, ResultSet userInformation) {
+    public User(int userID, String userName, String lastName, String firstName, 
+        String role, int level) {
         //Retrieves an existing user from the database.
-        
-        try {
+
             
-            userInformation.next();
-            
-            this.ID = userID;
-            
-            this.userName = userInformation.getString(2);
-            
-            this.lastName = userInformation.getString(3);
-            
-            this.firstName = userInformation.getString(4);
-            
-            this.role = userInformation.getString(5);
-            
-            this.level = userInformation.getInt(6);
-            
-        } catch(SQLException e) {
-            
-            System.out.println(e);
-            
-        }
-        
+        this.ID = userID;
+
+        this.userName = userName;
+
+        this.lastName = lastName;
+
+        this.firstName = firstName;
+
+        this.role = role;
+
+        this.level = level;       
         
     }
     

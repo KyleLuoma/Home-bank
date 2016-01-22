@@ -30,47 +30,57 @@ class HomeBank {
         BankQuery query = new BankQuery(connection);
         
         //Create a new user:
-        User activeUser = new User( "Luoma" , "Cody" , "child" , 1 , query );
+        //User activeUser = new User( "Luoma" , "Cody" , "child" , 1 , query );
+        
+        User activeUser = query.getUserObject(1);
         
         String userName = activeUser.getUserName();
-        
-        //query.putUser(activeUser);
-        
+
         //Check if required tables exist and create new tables if none.
         //query.createStandardTables(userName);
         
+        //query.putUser(activeUser);
+        
+        //User managingUser = new User( "Luoma", "Kyle", "parent", 2, query );
+        
+        //query.putUser(managingUser);
+        
         //Create a new account using dummy data; assigns a new account number to the object
-        Account account = new Account(
-                query, 2, 2
-        );
+        //Account codyAccount = new Account(query, 1, 2);
+        
+        //query.putAccount(codyAccount);
+                
+        //Account daddyAccount = new Account( query, 2, 1 );
+        
+        //query.putAccount(daddyAccount);
         
         //Create an account object that retrieves existing data from the database
-        Account openAccount = query.getAccountObject(2, userName);
+        Account openAccount = query.getAccountObject(1, userName);
         
+        System.out.println("Test of openAccount object. User = " 
+                + openAccount.getUserName() + "\n"
+                + "    Date account created = " 
+                + openAccount.getDateCreated().toString()
+                + "\n    Manager ID: " + openAccount.getManagerID());  
+        
+        System.out.println("Test of openUser object. ActiveUser = " + activeUser.getUserName());
         
         System.out.println(query.getHighestID(userName, "TRANSACTIONS"));
         
-        Transaction testTransaction = new Transaction(
-                query, 4, 4, 4, 4, 100.50, userName        
-        );
-        
-        System.out.println(testTransaction.getID());
-        
+        //Transaction testTransaction = new Transaction(
+        //        query, 2, 1, 2, 1, 100.50, userName        
+        //);
+      
         //test of method that puts a new transaction into the database
-        query.putTransaction(testTransaction); 
-        
-        //test of method that puts an account instance into the database
-        query.putAccount(account);
-        
-        System.out.println(openAccount.getID());
-        
+        //query.putTransaction(testTransaction); 
+                
         System.out.println("" + BankQuery.usageCheck() + " instances of BankQuery class.");
         
         System.out.println("" + Connect.usageCheck() + " connections to database");
                 
 
     }
-    
+        
 }
     
 

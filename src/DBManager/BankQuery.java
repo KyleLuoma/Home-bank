@@ -103,14 +103,14 @@ public class BankQuery {
             if(result.next()) {
                 
                 holderID = result.getInt(2);
-                
-                userName = this.lookupUserName(holderID);
-                
+                              
                 managerID = result.getInt(3);
                 
                 balance = result.getDouble(4);
                 
                 dateCreated = result.getDate(5);
+                
+                userName = this.lookupUserName(holderID);
                 
             }
             
@@ -174,7 +174,43 @@ public class BankQuery {
         
     }
     
-    public ResultSet getUser(int userID) {
+    public User getUserObject(int userID) {
+        
+        result = this.getUserData(userID) ;
+        
+        User user = null;
+                
+        try {
+            
+            if(result.next()) {
+                
+                user = new User(
+                        
+                    result.getInt(1),
+                    result.getString(2),
+                    result.getString(3),
+                    result.getString(4),
+                    result.getString(5),
+                    result.getInt(6)
+                );
+                                
+            } else { 
+                
+                System.out.println("No user with ID: " + userID + " in DB"); 
+                
+            }
+            
+        } catch(SQLException e) {
+                    
+                    System.out.println(e);
+                    
+        }
+        
+        return user;
+                
+    }
+    
+    public ResultSet getUserData(int userID) {
         
         String getUserQuery
                 = "SELECT * FROM MAIN.USERS WHERE ID = " + userID;
@@ -309,8 +345,8 @@ public class BankQuery {
         String createTransactionTableQuery 
                 = "CREATE table " + userName + ".TRANSACTIONS (\n"
                 + "ID               INTEGER NOT NULL, \n"
-                + "FROMACCOUNTID    INTEGER, \n"
-                + "TOACCOUNTID      INTEGER, \n"
+                + "CREDITACCOUNTID    INTEGER, \n"
+                + "DEBITACCOUNTID      INTEGER, \n"
                 + "AMOUNT           FLOAT,   \n"
                 + "DATE             DATE,    \n"
                 + "TIME             TIME    \n"

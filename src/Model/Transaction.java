@@ -15,9 +15,9 @@ public class Transaction {
     
     private double transactionAmount;
     
-    private int fromAccount;
+    private int creditAccount;
     
-    private int toAccount;
+    private int debitAccount;
     
     private int fromUser;
     
@@ -27,19 +27,19 @@ public class Transaction {
     
     private String userAccount;   
     
-    public Transaction ( BankQuery query, int fromAccount, int toAccount,
+    public Transaction ( BankQuery query, int creditAcccount, int debitAccount,
                          int fromUser, int toUser, double transactionAmount,
                          String userAccount) {
         
         this.transactionID = query.getHighestID(userAccount, "TRANSACTIONS") + 1;
         
-        this.fromAccount = fromAccount;
+        this.creditAccount = creditAcccount;
         
-        this.toAccount = toAccount;
+        this.debitAccount = debitAccount;
         
-        this.fromUser = fromUser; //transitive dependency. Replace with call to getUser
+        this.fromUser = fromUser; 
         
-        this.toUser = toUser; //transitive. see above.
+        this.toUser = toUser; 
         
         this.transactionAmount = transactionAmount;
         
@@ -59,13 +59,13 @@ public class Transaction {
         String putTransaction 
                 = "INSERT INTO " + userAccount + ".TRANSACTIONS ("                
                     + "\"ID\" , "
-                    + "\"FROMACCOUNTID\" , "
-                    + "\"TOACCOUNTID\" , "
+                    + "\"CREDITACCOUNTID\" , "
+                    + "\"DEBITACCOUNTID\" , "
                     + "\"AMOUNT\") "                
                 + "VALUES ( "                
                     + this.transactionID + " , " 
-                    + this.fromAccount + " , "
-                    + this.toAccount + " , "
+                    + this.creditAccount + " , "
+                    + this.debitAccount + " , "
                     + this.transactionAmount 
                     + ")";
         
