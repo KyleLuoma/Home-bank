@@ -26,19 +26,15 @@ public class Account {
     
     private Date dateCreated;
     
-    private String userName = "";
-    
     private ResultSet transactionList = null;
+    
+    private String schema = "";
             
     
-    public Account (BankQuery query, int holderID, int managerID) {
+    public Account (BankQuery query, int holderID, int managerID, String schema) {
         //Generates a new account, with a unique ID.
         
-        this.userName = query.lookupUserName(holderID);
-        
-        System.out.println("Account username = " + this.userName);
-        
-        this.ID = query.getHighestID(userName, "ACCOUNTS") + 1;
+        this.ID = query.getHighestID(schema, "ACCOUNTS") + 1;
         
         this.holderID = holderID;
         
@@ -46,18 +42,19 @@ public class Account {
         
         dateCreated = new Date(new java.util.Date().getTime());
         
+        this.schema = schema;
+        
         System.out.println("Account created on: " + dateCreated.toString());
         
     }
     
-    public Account (int accountID, int holderID, String userName, int managerID,
-            double balance, Date dateCreated) {
+    public Account (int accountID, int holderID, int managerID,
+            double balance, Date dateCreated, String schema) {
+        //Retrieves account from database
         
         this.ID = accountID;
         
         this.holderID = holderID;
-        
-        this.userName = userName;
         
         this.managerID = managerID;
         
@@ -65,51 +62,18 @@ public class Account {
         
         this.balance = balance;
         
-    }
-    
-    public Account (int accountID, ResultSet accountInformation, BankQuery query) {
-        //Retrieves an existing account from the database.
-        
-        try {
-            
-            accountInformation.next();
-                    
-            this.ID = accountID;
-                                    
-            this.holderID = accountInformation.getInt(2);
-            
-            this.userName = query.lookupUserName(holderID);
-            
-            this.managerID = accountInformation.getInt(3);
-            
-            this.balance = accountInformation.getDouble(4);
-            
-            this.dateCreated = accountInformation.getDate(5);
-            
-        } catch (SQLException e) {
-            
-            System.out.println("No accounts found!!!");
-            
-            System.out.println(e);
-            
-        }
-        
-        
+        this.schema = schema;
         
     }
     
+       
     public int getID() {
         
         return this.ID;
         
     }
     
-    public String getUserName() {
-        
-        return this.userName;
-        
-    }
-    
+   
     public Date getDateCreated() {
         
         return this.dateCreated;
@@ -134,7 +98,7 @@ public class Account {
         //generates a SQL instruction to insert a new account into the database.
         
         String putAccount 
-                = "INSERT INTO " + userName + ".ACCOUNTS ("                
+                = "INSERT INTO " + schema + ".ACCOUNTS ("                
                     + "\"ID\" , "
                     + "\"HOLDERID\" , "
                     + "\"MGRID\" , "

@@ -86,9 +86,9 @@ public class BankQuery {
         
     }
     
-    public Account getAccountObject(int accountID, String userName) {
+    public Account getAccountObject(int accountID, String schema) {
         
-        result = this.getAccountData(accountID, userName);
+        result = this.getAccountData(accountID, schema);
         
         int holderID = 0; 
         
@@ -97,6 +97,8 @@ public class BankQuery {
         double balance = 0;
         
         Date dateCreated = null;
+        
+        String userName = "";
         
         try {
             
@@ -110,8 +112,6 @@ public class BankQuery {
                 
                 dateCreated = result.getDate(5);
                 
-                userName = this.lookupUserName(holderID);
-                
             }
             
         } catch(SQLException e) {
@@ -122,17 +122,17 @@ public class BankQuery {
                                    
         }
         
-        Account returnAccount = new Account(accountID, holderID, userName, 
-        managerID, balance, dateCreated);
+        Account returnAccount = new Account(accountID, holderID,  
+        managerID, balance, dateCreated, schema);
         
         return returnAccount;
         
     }
     
-    public ResultSet getAccountData(int accountID, String userName) {
+    public ResultSet getAccountData(int accountID, String schema) {
         
         String getAccountQuery 
-                = "SELECT * FROM " + userName + ".ACCOUNTS WHERE"
+                = "SELECT * FROM " + schema + ".ACCOUNTS WHERE"
                 + " ID = " + accountID;
         
         ResultSet accountResult = null;
@@ -260,7 +260,7 @@ public class BankQuery {
         
     }
     
-    public int getHighestID(String accountName, String accountType) {
+    public int getHighestID(String schema, String accountType) {
         
         // Returns highest transaction ID. Use for generating new transaction to
         // avoid collisions.
@@ -268,7 +268,7 @@ public class BankQuery {
         Array resultString = null;
         
         String findHighestIDQuery 
-                = "SELECT ID FROM " + accountName + "." + accountType + " ORDER BY ID DESC";
+                = "SELECT ID FROM " + schema + "." + accountType + " ORDER BY ID DESC";
         
         int accountID = 0;
         
@@ -283,7 +283,7 @@ public class BankQuery {
             } else {
                 
                 System.out.println("Could not find an ID in table " 
-                                    + accountName + "." + accountType);
+                                    + schema + "." + accountType);
                 
                 accountID = 0;
                 
@@ -299,10 +299,10 @@ public class BankQuery {
         
     }
     
-    public ResultSet getAccountTransactions(String userName) {
+    public ResultSet getAccountTransactions(String schema) {
         
         String getTransactionQuery 
-                = "SELECT * FROM " + userName + ".TRANSACTIONS"
+                = "SELECT * FROM " + schema + ".TRANSACTIONS"
                 + "ORDER BY ID";
         
         try {
@@ -319,13 +319,13 @@ public class BankQuery {
         
     } 
     
-    public void createStandardTables(String userName) {
+    public void createStandardTables(String schema) {
         // checks for existence of required tables and creates new tables if none exist.
         // This method is currently a test bed for the javadb API. Needs to be 
         // reconfigured for it's actual purpose.
               
         String createUserTableQuery
-                = "CREATE table MAIN.USERS (\n"
+                = "CREATE table " + schema + ".USERS (\n"
                 + "ID          INTEGER NOT NULL, \n"
                 + "USERNAME    VARCHAR(30), \n"
                 + "LASTNAME    VARCHAR(30), \n"
@@ -334,7 +334,7 @@ public class BankQuery {
                 + "LEVEL       INTEGER )";
         
         String createAccountTableQuery
-                = "CREATE table " + userName + ".ACCOUNTS (\n"
+                = "CREATE table " + schema + ".ACCOUNTS (\n"
                 + "ID          INTEGER NOT NULL, \n"
                 + "HOLDERID    INTEGER NOT NULL, \n"
                 + "MGRID       INTEGER NOT NULL, \n"
@@ -343,7 +343,7 @@ public class BankQuery {
                 + ")";
 
         String createTransactionTableQuery 
-                = "CREATE table " + userName + ".TRANSACTIONS (\n"
+                = "CREATE table " + schema + ".TRANSACTIONS (\n"
                 + "ID               INTEGER NOT NULL, \n"
                 + "CREDITACCOUNTID    INTEGER, \n"
                 + "DEBITACCOUNTID      INTEGER, \n"
@@ -377,7 +377,7 @@ public class BankQuery {
             
         try {
         
-            if (checkTable("ACCOUNTS", dbConnection, userName) == false) {
+            if (checkTable("ACCOUNTS", dbConnection, schema) == false) {
                 
                 System.out.println("Creating account table");
                 statement = dbConnection.createStatement();
@@ -394,7 +394,7 @@ public class BankQuery {
             
         try {
         
-            if (checkTable("TRANSACTIONS", dbConnection, userName) == false) {
+            if (checkTable("TRANSACTIONS", dbConnection, schema) == false) {
                 
                 System.out.println("Creating transactions table");
                 statement = dbConnection.createStatement();
@@ -410,7 +410,7 @@ public class BankQuery {
         }
     }
     
-    private boolean checkTable(String tableName, Connection connection, String userName) {
+    private boolean checkTable(String tableName, Connection connection, String schema) {
         // Checks for the existence of a table within a database
         
         boolean tableExists;
@@ -419,7 +419,7 @@ public class BankQuery {
             
             Statement statement = connection.createStatement();
             DatabaseMetaData tableCheck = connection.getMetaData();
-            ResultSet tableVerify = tableCheck.getTables(null, userName, tableName, null);
+            ResultSet tableVerify = tableCheck.getTables(null, schema, tableName, null);
             tableVerify.next();            
             tableExists = tableName.equals(tableVerify.getString("TABLE_NAME"));
             

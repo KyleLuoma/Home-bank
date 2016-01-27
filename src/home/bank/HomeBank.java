@@ -30,14 +30,14 @@ class HomeBank {
         BankQuery query = new BankQuery(connection);
         
         //Create a new user:
-        //User activeUser = new User( "Luoma" , "Cody" , "child" , 1 , query );
+        User activeUser = new User( "Luoma" , "Cody" , "child" , 1 , query , "MAIN");
         
-        User activeUser = query.getUserObject(1);
+        //User activeUser = query.getUserObject(1);
         
-        String userName = activeUser.getUserName();
+        String schema = "MAIN";
 
         //Check if required tables exist and create new tables if none.
-        //query.createStandardTables(userName);
+        query.createStandardTables(schema);
         
         //query.putUser(activeUser);
         
@@ -46,26 +46,24 @@ class HomeBank {
         //query.putUser(managingUser);
         
         //Create a new account using dummy data; assigns a new account number to the object
-        //Account codyAccount = new Account(query, 1, 2);
+        Account codyAccount = new Account(query, 1, 2, schema);
         
-        //query.putAccount(codyAccount);
+        query.putAccount(codyAccount);
                 
         //Account daddyAccount = new Account( query, 2, 1 );
         
         //query.putAccount(daddyAccount);
         
         //Create an account object that retrieves existing data from the database
-        Account openAccount = query.getAccountObject(1, userName);
+        Account openAccount = query.getAccountObject(1, schema);
         
-        System.out.println("Test of openAccount object. User = " 
-                + openAccount.getUserName() + "\n"
-                + "    Date account created = " 
+        System.out.println( "    Date account created = " 
                 + openAccount.getDateCreated().toString()
                 + "\n    Manager ID: " + openAccount.getManagerID());  
         
         System.out.println("Test of openUser object. ActiveUser = " + activeUser.getUserName());
         
-        System.out.println(query.getHighestID(userName, "TRANSACTIONS"));
+        System.out.println(query.getHighestID(schema, "TRANSACTIONS"));
         
         //Transaction testTransaction = new Transaction(
         //        query, 2, 1, 2, 1, 100.50, userName        

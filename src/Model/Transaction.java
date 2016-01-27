@@ -25,13 +25,13 @@ public class Transaction {
     
     private int transactionID;
     
-    private String userAccount;   
+    private String schema;   
     
     public Transaction ( BankQuery query, int creditAcccount, int debitAccount,
                          int fromUser, int toUser, double transactionAmount,
-                         String userAccount) {
+                         String schema) {
         
-        this.transactionID = query.getHighestID(userAccount, "TRANSACTIONS") + 1;
+        this.transactionID = query.getHighestID(schema, "TRANSACTIONS") + 1;
         
         this.creditAccount = creditAcccount;
         
@@ -43,7 +43,7 @@ public class Transaction {
         
         this.transactionAmount = transactionAmount;
         
-        this.userAccount = userAccount;
+        this.schema = schema;
         
     }
     
@@ -57,7 +57,7 @@ public class Transaction {
         //generates a SQL instruction to insert transaction data into the database.
         
         String putTransaction 
-                = "INSERT INTO " + userAccount + ".TRANSACTIONS ("                
+                = "INSERT INTO " + schema + ".TRANSACTIONS ("                
                     + "\"ID\" , "
                     + "\"CREDITACCOUNTID\" , "
                     + "\"DEBITACCOUNTID\" , "

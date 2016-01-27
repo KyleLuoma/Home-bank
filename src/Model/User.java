@@ -30,8 +30,10 @@ public class User {
     
     private Date dateCreated;
     
+    private String schema;
+    
     public User(String lastName, String firstName, String role, int level, 
-            BankQuery query) {
+            BankQuery query, String schema) {
         
         //Initialization method used to generate a new user
         
@@ -44,7 +46,7 @@ public class User {
         this.userName = "" + firstName.substring(0, 1).toUpperCase() 
                 + lastName.toUpperCase();
         
-        this.ID = query.getHighestID("MAIN", "USERS") + 1;
+        this.ID = query.getHighestID(schema, "USERS") + 1;
         
         this.dateCreated = new Date(new java.util.Date().getTime());
         
@@ -80,7 +82,7 @@ public class User {
     public String getPutQuery() {
         
         String putUser 
-                = "INSERT INTO MAIN.USERS ("
+                = "INSERT INTO " + schema + ".USERS ("
                 + "\"ID\" , "
                 + "\"USERNAME\" , "
                 + "\"LASTNAME\" , "
