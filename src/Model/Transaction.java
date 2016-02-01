@@ -6,6 +6,8 @@
 package Model;
 
 import DBManager.BankQuery;
+import java.sql.Date;
+import java.sql.Time;
 
 /**
  *
@@ -19,17 +21,16 @@ public class Transaction {
     
     private int debitAccount;
     
-    private int fromUser;
-    
-    private int toUser;
-    
     private int transactionID;
+    
+    private Date transactionDate;
+    
+    private Time transactionTime;
     
     private String schema;   
     
     public Transaction ( BankQuery query, int creditAcccount, int debitAccount,
-                         int fromUser, int toUser, double transactionAmount,
-                         String schema) {
+                         double transactionAmount, String schema) {
         
         this.transactionID = query.getHighestID(schema, "TRANSACTIONS") + 1;
         
@@ -37,11 +38,11 @@ public class Transaction {
         
         this.debitAccount = debitAccount;
         
-        this.fromUser = fromUser; 
-        
-        this.toUser = toUser; 
-        
         this.transactionAmount = transactionAmount;
+        
+        this.transactionDate = new Date(new java.util.Date().getTime());
+        
+        this.transactionTime = new Time(new java.util.Date().getTime());
         
         this.schema = schema;
         
@@ -53,6 +54,18 @@ public class Transaction {
         
     }
     
+    public Date getDate() {
+        
+        return this.transactionDate;
+        
+    }
+    
+    public Time getTime() {
+        
+        return this.transactionTime;
+        
+    }
+    
     public String getPutQuery() {
         //generates a SQL instruction to insert transaction data into the database.
         
@@ -61,13 +74,20 @@ public class Transaction {
                     + "\"ID\" , "
                     + "\"CREDITACCOUNTID\" , "
                     + "\"DEBITACCOUNTID\" , "
-                    + "\"AMOUNT\") "                
+                    + "\"AMOUNT\" , "
+                    + "\"DATE\" , "
+                    + "\"TIME\" "
+                    + ") "                
                 + "VALUES ( "                
                     + this.transactionID + " , " 
                     + this.creditAccount + " , "
                     + this.debitAccount + " , "
-                    + this.transactionAmount 
+                    + this.transactionAmount + " , "
+                    + "\'" + this.transactionDate.toString() + "\'" + " , "
+                    + "\'" + this.transactionTime.toString() + "\'" 
                     + ")";
+        
+        System.out.println(putTransaction);
         
         return putTransaction;
         

@@ -66,12 +66,15 @@ class HomeBank {
         
         System.out.println(query.getHighestID(schema, "TRANSACTIONS"));
         
-        //Transaction testTransaction = new Transaction(
-        //        query, 2, 1, 2, 1, 100.50, userName        
-        //);
+        Transaction testTransaction = new Transaction(
+                query, 2, 1, 100.50, schema       
+        );
+        
+        System.out.println(testTransaction.getDate().toString());
+        System.out.println(testTransaction.getTime().toString());
       
         //test of method that puts a new transaction into the database
-        //query.putTransaction(testTransaction); 
+        query.putTransaction(testTransaction); 
                 
         System.out.println("" + BankQuery.usageCheck() + " instances of BankQuery class.");
         
