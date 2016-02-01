@@ -22,16 +22,20 @@ public class Account {
     
     private int managerID;
     
-    private double balance = 1;
+    private double balance = 0;
     
     private Date dateCreated;
     
     private ResultSet transactionList = null;
     
     private String schema = "";
-            
     
-    public Account (BankQuery query, int holderID, int managerID, String schema) {
+    private String accountName = "";
+    
+    private String type = "";         
+    
+    public Account (BankQuery query, int holderID, int managerID, 
+            String accountName, String type, String schema) {
         //Generates a new account, with a unique ID.
         
         this.ID = query.getHighestID(schema, "ACCOUNTS") + 1;
@@ -42,6 +46,10 @@ public class Account {
         
         dateCreated = new Date(new java.util.Date().getTime());
         
+        this.accountName = accountName;
+        
+        this.type = type;
+        
         this.schema = schema;
         
         System.out.println("Account created on: " + dateCreated.toString());
@@ -49,7 +57,8 @@ public class Account {
     }
     
     public Account (int accountID, int holderID, int managerID,
-            double balance, Date dateCreated, String schema) {
+            double balance, Date dateCreated, String accountName, 
+            String type, String schema) {
         //Retrieves account from database
         
         this.ID = accountID;
@@ -61,6 +70,10 @@ public class Account {
         this.dateCreated = dateCreated;
         
         this.balance = balance;
+        
+        this.accountName = accountName;
+        
+        this.type = type;
         
         this.schema = schema;
         
@@ -103,14 +116,18 @@ public class Account {
                     + "\"HOLDERID\" , "
                     + "\"MGRID\" , "
                     + "\"BALANCE\" , "
-                    + "\"DATECREATED\""
+                    + "\"DATECREATED\" , "
+                    + "\"ACCOUNTNAME\" , "
+                    + "\"TYPE\""
                     + ")"                
                 + " VALUES ("                
                     + this.ID + " , " 
                     + this.holderID + " , "
                     + this.managerID + " , "
                     + this.balance + " , "
-                    + "\'" + this.dateCreated.toString() + "\'"
+                    + "\'" + this.dateCreated.toString() + "\'" + " , "
+                    + "\'" + this.accountName + "\'" + " , "
+                    + "\'" + this.type + "\'"
                     + ") ";
         
         System.out.println(putAccount);

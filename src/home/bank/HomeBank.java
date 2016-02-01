@@ -46,7 +46,8 @@ class HomeBank {
         //query.putUser(managingUser);
         
         //Create a new account using dummy data; assigns a new account number to the object
-        Account codyAccount = new Account(query, 1, 2, schema);
+        Account codyAccount = new Account(query, 1, 2, "Cody Checking", 
+                "CHECKING", schema);
         
         query.putAccount(codyAccount);
                 

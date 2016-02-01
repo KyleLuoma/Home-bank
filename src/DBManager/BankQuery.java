@@ -98,7 +98,9 @@ public class BankQuery {
         
         Date dateCreated = null;
         
-        String userName = "";
+        String accountName = "";
+        
+        String type = "";
         
         try {
             
@@ -112,6 +114,10 @@ public class BankQuery {
                 
                 dateCreated = result.getDate(5);
                 
+                accountName = result.getString(6);
+                
+                type = result.getString(7);
+                
             }
             
         } catch(SQLException e) {
@@ -123,7 +129,7 @@ public class BankQuery {
         }
         
         Account returnAccount = new Account(accountID, holderID,  
-        managerID, balance, dateCreated, schema);
+        managerID, balance, dateCreated, accountName, type, schema);
         
         return returnAccount;
         
@@ -184,14 +190,14 @@ public class BankQuery {
             
             if(result.next()) {
                 
-                user = new User(
+                user = new User( //pass parameters to user object directly from reult
                         
-                    result.getInt(1),
-                    result.getString(2),
-                    result.getString(3),
-                    result.getString(4),
-                    result.getString(5),
-                    result.getInt(6)
+                    result.getInt(1),       //user ID
+                    result.getString(2),    //user name
+                    result.getString(3),    //last name
+                    result.getString(4),    //first name
+                    result.getString(5),    //user role
+                    result.getInt(6)        //user level
                 );
                                 
             } else { 
@@ -339,7 +345,9 @@ public class BankQuery {
                 + "HOLDERID    INTEGER NOT NULL, \n"
                 + "MGRID       INTEGER NOT NULL, \n"
                 + "BALANCE     FLOAT, \n"
-                + "DATECREATED DATE \n"
+                + "DATECREATED DATE, \n"
+                + "ACCOUNTNAME VARCHAR(30), \n"
+                + "TYPE        VARCHAR(10) \n"
                 + ")";
 
         String createTransactionTableQuery 
