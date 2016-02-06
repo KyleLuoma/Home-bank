@@ -86,7 +86,12 @@ public class Account {
         
     }
     
-   
+    public double getBalance() {
+        
+        return this.balance;
+        
+    }
+    
     public Date getDateCreated() {
         
         return this.dateCreated;
@@ -108,6 +113,12 @@ public class Account {
     public void setType(String type) {
         
         this.type = type;
+        
+    }
+    
+    public void setBalance(double newBalance) {
+        
+        this.balance = newBalance;
         
     }
     

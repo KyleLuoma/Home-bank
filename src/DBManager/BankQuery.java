@@ -325,6 +325,69 @@ public class BankQuery {
         
     } 
     
+    public double getAccountBalance(int accountID, String schema) {
+        //uses SQL command to retrieve sum of debits and credits associated with
+        //accountID account, then subtracts debits from credits to get account
+        //balance.
+        
+        double debitSum = 0;
+        
+        double creditSum = 0;
+        
+        double accountBalance = 0;
+        
+        String getAccountDebitsQuery 
+                = "SELECT SUM(AMOUNT) FROM " + schema + ".TRANSACTIONS "
+                + "WHERE DEBITACCOUNTID = " + accountID;
+        
+        String getAccountCreditsQuery 
+                = "SELECT SUM(AMOUNT) FROM " + schema + ".TRANSACTIONS "
+                + "WHERE CREDITACCOUNTID = " + accountID;
+        
+        
+        try { 
+        
+            result = statement.executeQuery(getAccountDebitsQuery);
+            
+            if (result.next()) {
+                
+                debitSum = result.getDouble(1);
+                
+                System.out.println("Debit sum of account " + accountID
+                        + " = " + debitSum);
+                
+            } else { debitSum = 0; }
+            
+            result = statement.executeQuery(getAccountCreditsQuery);
+            
+            if (result.next()) {
+                
+                creditSum = result.getDouble(1);
+                
+                System.out.println("Credit sum of account " + accountID
+                        + " = " + creditSum);             
+                
+            } else { creditSum = 0; }
+            
+        
+        } catch (SQLException e) {
+            
+            System.out.println(e);
+            
+            System.out.println("Error encountered while trying to get sum of "
+                    + " account " + accountID);
+            
+        }
+        
+        accountBalance = debitSum - creditSum;
+        
+        System.out.println("Account " + accountID 
+                + " balance = " + accountBalance);
+        
+        return accountBalance;
+        
+    }
+    
     public void createStandardTables(String schema) {
         // checks for existence of required tables and creates new tables if none exist.
         // This method is currently a test bed for the javadb API. Needs to be 
