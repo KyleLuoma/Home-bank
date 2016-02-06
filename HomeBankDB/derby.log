@@ -12,3 +12,9 @@ os.arch=amd64
 os.version=6.3
 derby.system.home=C:\Java Projects\home bank\HomeBankDB
 Database Class Loader started - derby.database.classpath=''
+----------------------------------------------------------------
+Mon Feb 01 05:31:06 PST 2016: Shutting down Derby engine
+----------------------------------------------------------------
+Mon Feb 01 05:31:06 PST 2016:
+Shutting down instance a816c00e-0152-9a66-54f4-0000436a5441 on database directory C:\Java Projects\home bank\HomeBankDB\HomeBankDB with class loader sun.misc.Launcher$AppClassLoader@5e2de80c 
+----------------------------------------------------------------
