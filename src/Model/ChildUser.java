@@ -6,6 +6,7 @@
 package Model;
 
 import DBManager.BankQuery;
+import java.util.ArrayList;
 
 /**
  *
@@ -13,7 +14,7 @@ import DBManager.BankQuery;
  */
 public class ChildUser extends User {
     
-    int[] acceptedJobs = null;
+    ArrayList<Integer> acceptedJobs = new ArrayList<>();
     
     public ChildUser(String lastName, String firstName, int level, 
             BankQuery query, String schema) {

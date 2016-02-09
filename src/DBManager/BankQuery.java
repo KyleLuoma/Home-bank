@@ -13,6 +13,7 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 
 /**
@@ -263,6 +264,16 @@ public class BankQuery {
         }
         
         return userName;
+        
+    }
+    
+    public ArrayList<Integer> getAcceptedJobs(int userID) {
+        
+        ArrayList<Integer> acceptedJobs = new ArrayList<>();
+        
+        //insert sql statement to pull acceptedJobs from jobs table where ID = userID.
+        
+        return acceptedJobs;
         
     }
     
