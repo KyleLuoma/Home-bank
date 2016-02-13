@@ -434,6 +434,17 @@ public class BankQuery {
                 + "TIME             TIME    \n"
                 + ")";
         
+        String createAllowanceTableQuery
+                = "CREATE table " + schema + ".ALLOWANCES (\n"
+                + "ID           INTEGER NOT NULL, \n"
+                + "HOLDERID     INTEGER NOT NULL, \n"
+                + "MGRID        INTEGER NOT NULL, \n"
+                + "AMOUNT       FLOAT,            \n"
+                + "FREQUENCY    VARCHAR(10),      \n"
+                + "DATECREATED  DATE,             \n"
+                + "ACCOUNTNAME  VARCHAR(30)       \n"
+                + ")";
+        
         Statement statement = null;
         
         //boolean test = checkTable("USER", dbConnection, accountName);
@@ -487,6 +498,23 @@ public class BankQuery {
         } catch (SQLException tt) {
 
             System.out.println("There was a problem creating the transactions table");
+            System.out.println(tt);
+
+        }
+        
+        try {
+        
+            if (checkTable("ALLOWANCES", dbConnection, schema) == false) {
+                
+                System.out.println("Creating allowances table");
+                statement = dbConnection.createStatement();
+                statement.execute(createAllowanceTableQuery);
+                
+            } else {System.out.println("Did not create allowances table, already exists");}
+            
+        } catch (SQLException tt) {
+
+            System.out.println("There was a problem creating the allowances table");
             System.out.println(tt);
 
         }
