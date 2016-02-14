@@ -87,6 +87,25 @@ public class BankQuery {
         
     }
     
+    public void putJob (JobPost job) {
+        
+        String putJob = job.getPutQuery();
+        
+        try {
+            
+            System.out.println("Trying to put a new job into the DB.");
+            statement.execute(putJob);
+            
+        } catch (SQLException pj) {
+            
+            System.out.println(pj);
+            System.out.println("Error encounterd when trying to execute "
+                + "BankQuery.putJob()");
+            
+        }
+        
+    }
+    
     public Account getAccountObject(int accountID, String schema) {
         
         result = this.getAccountData(accountID, schema);
@@ -445,6 +464,17 @@ public class BankQuery {
                 + "ACCOUNTNAME  VARCHAR(30)       \n"
                 + ")";
         
+        String createJobsTableQuery
+                = "CREATE table " + schema + ".JOBS (\n"
+                + "ID           INTEGER NOT NULL, \n"
+                + "POSTEDBYID   INTEGER NOT NULL, \n"
+                + "ACCEPTEDBYID INTEGER NOT NULL, \n"
+                + "DESCRIPTION  VARCHAR(500),     \n"
+                + "DEADLINE     DATE,             \n"
+                + "OPENEDON     DATE,             \n"
+                + "BIDAMOUNT    FLOAT             \n"
+                + ")";
+        
         Statement statement = null;
         
         //boolean test = checkTable("USER", dbConnection, accountName);
@@ -518,6 +548,28 @@ public class BankQuery {
             System.out.println(tt);
 
         }
+        
+        try {
+            
+            if (checkTable("JOBS", dbConnection, schema) == false) {
+                
+                System.out.println("Creating jobs table");
+                statement = dbConnection.createStatement();
+                statement.execute(createJobsTableQuery);
+                
+            } else {
+                
+                System.out.println("Did not create jobs table, already exists");
+                
+            }
+            
+        } catch (SQLException jt) {
+            
+            System.out.println("There was a problem creating the jobs table");
+            System.out.println(jt);
+            
+        }
+        
     }
     
     private boolean checkTable(String tableName, Connection connection, String schema) {
