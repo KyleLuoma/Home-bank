@@ -29,63 +29,11 @@ class HomeBank {
         
         BankQuery query = new BankQuery(connection);
         
-        //Create a new user:
-        User activeUser = new User( "Luoma" , "Cody" , "child" , 1 , query , "MAIN");
-        
-        //User activeUser = query.getUserObject(1);
-        
         String schema = "MAIN";
-
-        //Check if required tables exist and create new tables if none.
-        query.createStandardTables(schema);
         
-        //query.putUser(activeUser);
+        TestDriver testDriver = new TestDriver();
         
-        //User managingUser = new User( "Luoma", "Kyle", "parent", 2, query );
-        
-        //query.putUser(managingUser);
-        
-        //Create a new account using dummy data; assigns a new account number to the object
-        //Account codyAccount = new Account(query, 1, 2, "Cody Checking", 
-        //        "CHECKING", schema);
-        
-        //query.putAccount(codyAccount);
-                
-        //Account daddyAccount = new Account( query, 2, 1 );
-        
-        //query.putAccount(daddyAccount);
-        
-        //Create an account object that retrieves existing data from the database
-        Account openAccount = query.getAccountObject(1, schema);
-        
-        openAccount.setBalance(query.getAccountBalance(openAccount.getID(), 
-                schema));
-        
-        System.out.println( "    Date account created = " 
-                + openAccount.getDateCreated().toString()
-                + "\n    Manager ID: " + openAccount.getManagerID()
-                + "\n    Account Balance: " + openAccount.getBalance());  
-        
-        System.out.println("Test of openUser object. ActiveUser = " + activeUser.getUserName());
-        
-        System.out.println(query.getHighestID(schema, "TRANSACTIONS"));
-        
-        /*Transaction testTransaction = new Transaction(
-                query, 1, 2, 12.1 , schema       
-        );*/
-        
-        //System.out.println(testTransaction.getDate().toString());
-        //System.out.println(testTransaction.getTime().toString());
-      
-        //test of method that puts a new transaction into the database
-        //query.putTransaction(testTransaction); 
-        
-        System.out.println(query.getAccountBalance(2, schema));
-                
-        System.out.println("" + BankQuery.usageCheck() + " instances of BankQuery class.");
-        
-        System.out.println("" + Connect.usageCheck() + " connections to database");
-                
+        query.putJob(testDriver.newJobObject(schema, query));
 
     }
         

@@ -51,11 +51,53 @@ public class JobPost {
         
         this.schema = schema;
         
-        System.out.println("Job opened on: " + openedOn.toString());
+        System.out.println("Job " + this.ID + " opened on: " 
+                + openedOn.toString() + "\nSchema: " + this.schema);
         
     }
     
+    //accessor functions:
+    public int getID() {
+        
+        return this.ID;
+        
+    }
     
+    public int getPostedByID() {
+        
+        return this.postedByID;
+        
+    }
+    
+    public int getAcceptedByID() {
+        
+        return this.acceptedByID;
+        
+    }
+    
+    public String getDescription() {
+        
+        return this.description;
+        
+    }
+    
+    public Date getDeadline() {
+        
+        return this.deadline;
+        
+    }
+    
+    public Date getOpenedOn() {
+        
+        return this.openedOn;
+        
+    }
+    
+    public double getBidAmount() {
+        
+        return this.bidAmount;
+        
+    }
     
     public String getPutQuery() {
         //generates a SQL instruction to insert a new job into the database
