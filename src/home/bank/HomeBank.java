@@ -31,10 +31,15 @@ class HomeBank {
         
         String schema = "MAIN";
         
+        query.createStandardTables(schema);
+        
         TestDriver testDriver = new TestDriver();
         
-        query.putJob(testDriver.newJobObject(schema, query));
+        ParentUser testUser = testDriver.newUserObject(schema, query);
 
+        testDriver.checkUserPassword("KLUOMA", "password", testUser);
+        testDriver.checkUserPassword("KLUOMA", "notthepassword", testUser);
+        
     }
         
 }

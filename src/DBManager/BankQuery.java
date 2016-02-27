@@ -430,7 +430,9 @@ public class BankQuery {
                 + "LASTNAME    VARCHAR(30), \n"
                 + "FIRSTNAME   VARCHAR(30), \n"
                 + "ROLE        VARCHAR(10), \n"
-                + "LEVEL       INTEGER )";
+                + "LEVEL       INTEGER,     \n"
+                + "PASSWORD    VARCHAR(192) \n"
+                + ")";
         
         String createAccountTableQuery
                 = "CREATE table " + schema + ".ACCOUNTS (\n"

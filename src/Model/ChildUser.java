@@ -17,9 +17,9 @@ public class ChildUser extends User {
     ArrayList<Integer> acceptedJobs = new ArrayList<>();
     
     public ChildUser(String lastName, String firstName, int level, 
-            BankQuery query, String schema) {
+            BankQuery query, String schema, String password) {
         
-        super(lastName, firstName, "child", level, query, schema);
+        super(lastName, firstName, "child", level, query, schema, password);
         
         //this.acceptedJobs = query.getAcceptedJobs(ID); //need to create acceptedjobs method in Query
         

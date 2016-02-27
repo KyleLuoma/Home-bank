@@ -34,4 +34,37 @@ public class TestDriver {
         
     }
     
+    ParentUser newUserObject(String schema, BankQuery query) {
+        
+        ParentUser newUser = new ParentUser(
+                "Luoma",
+                "Kyle",
+                1,
+                query,
+                schema,
+                "password"
+        );
+        
+        System.out.println("Username:" + newUser.getUserName());
+        System.out.println("PasswordHash: " + newUser.getPasswordHash());
+        
+        query.putUser(newUser);
+        
+        return newUser;
+        
+    }
+    
+    void checkUserPassword(String userName, String password, User user) {
+        
+        if(
+                User.hashPassword(password, userName)
+                        .equals(user.getPasswordHash())
+                )
+        {
+            System.out.println("The password is correct.");
+        } else {
+            System.out.println("Invalid username or password");
+        }
+    }
+    
 }

@@ -17,9 +17,9 @@ public class ParentUser extends User {
     ArrayList<Integer> postedJobs = new ArrayList<>();
     
     public ParentUser(String lastName, String firstName, int level,
-        BankQuery query, String schema, int[] postedJobs) {
+        BankQuery query, String schema, String password) {
         
-        super(lastName, firstName, "parent", level, query, schema);
+        super(lastName, firstName, "parent", level, query, schema, password);
         
         //this.postedJobs = query.getParentJobs(this.ID); //need to create getparentjobs method in query
         
