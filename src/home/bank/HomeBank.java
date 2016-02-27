@@ -41,19 +41,17 @@ public class HomeBank extends Application{
     public void start(Stage primaryStage) {
         
         primaryStage.show();
+        String userNamePassword[] = this.login(); //Get username and password
         
-        BankQuery query = this.login(); //Connects to the homebank DB
-        //Connection connection = homeDB.getConnection();
-        //BankQuery query = new BankQuery(connection);
+        Connect connector = new Connect(userNamePassword[0], userNamePassword[1]); 
+        BankQuery query = new BankQuery(connector.getConnection());
         String schema = "MAIN";
         System.out.println("OUTPUT");
         TestDriver testDriver = new TestDriver();
-
-        
         
     }
     
-    public BankQuery login() {
+    public String[] login() {
         Stage loginScreen = new Stage();
         loginScreen.setTitle("Home Bank Login");
         GridPane grid = new GridPane();
@@ -64,15 +62,14 @@ public class HomeBank extends Application{
         PasswordField passwordInput = new PasswordField();
         Button loginButton = new Button("Sign In");
         Connect newConnection = new Connect();
+        String[] userInput = new String[2];
         
         loginButton.setOnAction(new EventHandler<ActionEvent> () {
             
             @Override
             public void handle(ActionEvent e) {
-                        newConnection.setUserName(userNameInput.getText());
-                        newConnection.setPassword(passwordInput.getText());
-                        newConnection.resetConnection();
-                        System.out.println(newConnection.getConnectionValidity());
+                        userInput[0] = userNameInput.getText();
+                        userInput[1] = passwordInput.getText();
                         loginScreen.close();
             }
         });
@@ -89,16 +86,9 @@ public class HomeBank extends Application{
         grid.setAlignment(Pos.CENTER);
         loginScreen.setScene(new Scene(grid, 320, 240));
         loginScreen.showAndWait();
-        
-        if (true) {
-            Connection established = newConnection.getConnection();
-            System.out.println(established.toString());
-            BankQuery newQuery = new BankQuery(established);
-            return newQuery;
-        }
-        
-        return null;
-                
+
+        return userInput;
+   
     }
     
 }
