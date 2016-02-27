@@ -31,21 +31,75 @@ public class Connect {
     
     private static int numberOfConnections = 0;
     
+    private String userName;
+    
+    private String password;
     
     public Connect(){
         
         this.loadDBDriver();
         
         this.createDB();
-        
-        dbConnection = this.connectToDB();
-        
+                
     }
     
+    public Connect(String userName, String password){
+        
+        this.loadDBDriver();
+        
+        this.createDB();
+        
+        dbConnection = this.connectToDB(userName, password);
+        
+    }
     
     public Connection getConnection() {
         
         return dbConnection;
+        
+    }
+    
+    public void resetConnection() {
+        
+        this.connectToDB(this.userName, this.password);
+        
+    }
+    
+    public String getUserName() {
+        
+        return this.userName;
+        
+    }
+    
+    public String getPassword() {
+        
+        return this.password;
+        
+    }
+    
+    public boolean getConnectionValidity() {
+        
+        boolean isValid = false;
+        
+        try {
+            isValid = this.dbConnection.isValid(10);
+        } catch (SQLException e) {
+            System.out.println(e);           
+        }
+        
+        return isValid;
+        
+    }
+    
+    public void setUserName(String newUserName) {
+        
+        this.userName = newUserName;
+        
+    }
+    
+    public void setPassword(String newPassword) {
+        
+        this.password = newPassword;
         
     }
     
@@ -54,7 +108,6 @@ public class Connect {
         return numberOfConnections;
         
     }
-     
     
     private Connection connectToDB() {
         //connects to database
@@ -65,8 +118,10 @@ public class Connect {
         try {
             
             dbConnection = DriverManager.getConnection(stringURL);
-            
-            System.out.println("Connected to database");
+            if (dbConnection.isValid(30)) {
+                System.out.println("Connected to database");
+            }
+
             
         } catch (SQLException sqle) {
             
@@ -82,7 +137,35 @@ public class Connect {
         
     }
 
-    
+        private Connection connectToDB(String userName, String password) {
+        //connects to database
+        Connection dbConnection = null;
+        
+        String stringURL = "jdbc:derby:HomeBankDB;user=" + userName 
+                + ";password=" + password;
+        
+        try {
+            
+            dbConnection = DriverManager.getConnection(stringURL);
+            
+            if (dbConnection.isValid(30)) {
+                System.out.println("Connected to database");
+            }
+            
+        } catch (SQLException sqle) {
+            
+            System.out.println("Unable to connect to the database. Check to see if it's open.");
+            
+            }
+        
+        numberOfConnections++;
+        
+        System.out.println("Total connections: " + numberOfConnections);
+        
+        return dbConnection;
+        
+    }
+        
     private void loadDBDriver() {
         //Load JDBC driver
         

@@ -9,7 +9,8 @@ import DBManager.BankQuery;
 import DBManager.Connect;
 import Model.*;
 import java.sql.Date;
-
+import View.*;
+import javafx.stage.Stage;
 
 /**
  *
@@ -17,7 +18,7 @@ import java.sql.Date;
  */
 public class TestDriver {
     
-    JobPost newJobObject(String schema, BankQuery query) {
+    public JobPost newJobObject(String schema, BankQuery query) {
         
         Date openedOn = new Date(new java.util.Date().getTime());
         Date deadline = new Date(12345);
@@ -33,5 +34,5 @@ public class TestDriver {
         return newJob;
         
     }
-    
+ 
 }
