@@ -240,50 +240,70 @@ public class BankQuery {
         
         String getUserQuery
                 = "SELECT * FROM MAIN.USERS WHERE ID = " + userID;
-        
+        System.out.println(getUserQuery);
         try {
-            
             result = statement.executeQuery(getUserQuery);
-            
         } catch(SQLException e) {
-            
             System.out.println(e);
-            
         }
-        
         return result;
-        
     }
     
-    public String lookupUserName(int userID) {
-        
+    public int lookupUserID(String userName, String schema) {
+        //Get first userID associated with provided username
+        String getUserIDQuery 
+                = "SELECT ID FROM " + schema + ".USERS WHERE USERNAME = '" + userName + "'";
+        int userId = 0;
+        System.out.println(getUserIDQuery);
+        try {
+            result = statement.executeQuery(getUserIDQuery);
+            if(result.next()){
+                userId = result.getInt(1);
+            } else {
+                System.out.println("No such username");
+            }
+        } catch(SQLException un) {
+            System.out.println(un);
+        }
+        return userId;
+    }
+    
+    public String lookupUserName(int userID, String schema) {
+        //get username associated with userID from database
         String lookupUserNameQuery 
-                = "SELECT USERNAME FROM MAIN.USERS WHERE ID = " + userID;
-        
+                = "SELECT USERNAME FROM " + schema + ".USERS WHERE ID = " + userID;
+        System.out.println(lookupUserNameQuery);
         String userName = "";
+        try {
+            result = statement.executeQuery(lookupUserNameQuery);
+            if(result.next()) {
+                userName = result.getString(1); 
+            } else {
+                System.out.println("No users found in database");   
+            } 
+        } catch(SQLException e) {   
+            System.out.println(e);           
+        }       
+        return userName;       
+    }
+    
+    public String lookupUserHash(int userID, String schema) {
+        //get password hash associated with userID from database
+                String lookupHashQuery 
+                = "SELECT PASSWORD FROM " + schema + ".USERS WHERE ID = " + userID;
+        String hash = "";
         
         try {
-            
-            result = statement.executeQuery(lookupUserNameQuery);
-            
+            result = statement.executeQuery(lookupHashQuery);
             if(result.next()) {
-                
-                userName = result.getString(1);
-                
+                hash = result.getString(1); 
             } else {
-                
-                System.out.println("No users found in database");
-                
-            }
-            
-        } catch(SQLException e) {
-            
-            System.out.println(e);
-            
-        }
-        
-        return userName;
-        
+                System.out.println("No users found in database");   
+            } 
+        } catch(SQLException e) {   
+            System.out.println(e);           
+        }       
+        return hash; 
     }
     
     public ArrayList<Integer> getAcceptedJobs(int userID) {
