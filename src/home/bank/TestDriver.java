@@ -54,17 +54,18 @@ public class TestDriver {
         
     }
     
-    void checkUserPassword(String userName, String password, User user) {
+    void checkUserPassword(String userName, String password, 
+            String schema, BankQuery query) {
         
-        if(
-                User.hashPassword(password, userName)
-                        .equals(user.getPasswordHash())
-                )
-        {
-            System.out.println("The password is correct.");
+        int userID = query.lookupUserID(userName, schema);
+        String hashIn = query.lookupUserHash(userID, schema);
+        
+        if(User.hashPassword(password, userName).equals(hashIn)) {
+            System.out.println("Welcome, user " + userName);
         } else {
-            System.out.println("Invalid username or password");
+            System.out.println("Incorrect credentials");
         }
-    }
+    }    
+    
     
 }
