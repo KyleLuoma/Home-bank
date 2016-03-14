@@ -9,7 +9,6 @@ import DBManager.BankQuery;
 import DBManager.Connect;
 import Model.*;
 import java.sql.Date;
-import View.*;
 import javafx.stage.Stage;
 
 /**
