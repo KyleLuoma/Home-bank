@@ -32,7 +32,9 @@ public class BankQuery {
     
     private static int usageCounter = 0; 
     
-    public BankQuery(Connection connectionIn) {
+    String schema;
+    
+    public BankQuery(Connection connectionIn, String schemaIn) {
         
         try {
         
@@ -49,6 +51,8 @@ public class BankQuery {
             System.out.println(e);
             
         }
+        
+        this.schema = schemaIn;
         
         usageCounter++;
     
@@ -106,9 +110,9 @@ public class BankQuery {
         
     }
     
-    public Account getAccountObject(int accountID, String schema) {
+    public Account getAccountObject(int accountID) {
         
-        result = this.getAccountData(accountID, schema);
+        result = this.getAccountData(accountID);
         
         int holderID = 0; 
         
@@ -155,7 +159,7 @@ public class BankQuery {
         
     }
     
-    public ResultSet getAccountData(int accountID, String schema) {
+    public ResultSet getAccountData(int accountID) {
         
         String getAccountQuery 
                 = "SELECT * FROM " + schema + ".ACCOUNTS WHERE"
@@ -249,7 +253,7 @@ public class BankQuery {
         return result;
     }
     
-    public int lookupUserID(String userName, String schema) {
+    public int lookupUserID(String userName) {
         //Get first userID associated with provided username
         String getUserIDQuery 
                 = "SELECT ID FROM " + schema + ".USERS WHERE USERNAME = '" + userName + "'";
@@ -268,7 +272,7 @@ public class BankQuery {
         return userId;
     }
     
-    public String lookupUserName(int userID, String schema) {
+    public String lookupUserName(int userID) {
         //get username associated with userID from database
         String lookupUserNameQuery 
                 = "SELECT USERNAME FROM " + schema + ".USERS WHERE ID = " + userID;
@@ -287,11 +291,33 @@ public class BankQuery {
         return userName;       
     }
     
-    public String lookupUserHash(int userID, String schema) {
+    public String lookupUserHash(int userID) {
         //get password hash associated with userID from database
                 String lookupHashQuery 
                 = "SELECT PASSWORD FROM " + schema + ".USERS WHERE ID = " + userID;
         String hash = "";
+        
+        try {
+            result = statement.executeQuery(lookupHashQuery);
+            if(result.next()) {
+                hash = result.getString(1); 
+            } else {
+                System.out.println("No users found in database");   
+            } 
+        } catch(SQLException e) {   
+            System.out.println(e);           
+        }       
+        return hash; 
+    }
+    
+    public String lookupUserHash(String userName) {
+        //get password hash associated with userName from database
+                String lookupHashQuery 
+                = "SELECT PASSWORD FROM " + schema + ".USERS WHERE USERNAME = '"
+                        + userName + "'";
+        String hash = "";
+        
+        System.out.println(lookupHashQuery);
         
         try {
             result = statement.executeQuery(lookupHashQuery);
@@ -316,7 +342,7 @@ public class BankQuery {
         
     }
     
-    public int getHighestID(String schema, String accountType) {
+    public int getHighestID(String accountType) {
         
         // Returns highest transaction ID. Use for generating new transaction to
         // avoid collisions.
@@ -355,7 +381,7 @@ public class BankQuery {
         
     }
     
-    public ResultSet getAccountTransactions(String schema) {
+    public ResultSet getAccountTransactions() {
         
         String getTransactionQuery 
                 = "SELECT * FROM " + schema + ".TRANSACTIONS"
@@ -375,7 +401,7 @@ public class BankQuery {
         
     } 
     
-    public double getAccountBalance(int accountID, String schema) {
+    public double getAccountBalance(int accountID) {
         //uses SQL command to retrieve sum of debits and credits associated with
         //accountID account, then subtracts debits from credits to get account
         //balance.
@@ -438,7 +464,7 @@ public class BankQuery {
         
     }
     
-    public void createStandardTables(String schema) {
+    public void createStandardTables() {
         // checks for existence of required tables and creates new tables if none exist.
         // This method is currently a test bed for the javadb API. Needs to be 
         // reconfigured for it's actual purpose.
@@ -505,7 +531,7 @@ public class BankQuery {
         
         try {
             
-            if (checkTable("USERS", dbConnection, "MAIN") == false) {
+            if (checkTable("USERS", dbConnection) == false) {
 
                 System.out.println("Creating user table");
                 statement = dbConnection.createStatement();
@@ -522,7 +548,7 @@ public class BankQuery {
             
         try {
         
-            if (checkTable("ACCOUNTS", dbConnection, schema) == false) {
+            if (checkTable("ACCOUNTS", dbConnection) == false) {
                 
                 System.out.println("Creating account table");
                 statement = dbConnection.createStatement();
@@ -539,7 +565,7 @@ public class BankQuery {
             
         try {
         
-            if (checkTable("TRANSACTIONS", dbConnection, schema) == false) {
+            if (checkTable("TRANSACTIONS", dbConnection) == false) {
                 
                 System.out.println("Creating transactions table");
                 statement = dbConnection.createStatement();
@@ -556,7 +582,7 @@ public class BankQuery {
         
         try {
         
-            if (checkTable("ALLOWANCES", dbConnection, schema) == false) {
+            if (checkTable("ALLOWANCES", dbConnection) == false) {
                 
                 System.out.println("Creating allowances table");
                 statement = dbConnection.createStatement();
@@ -573,7 +599,7 @@ public class BankQuery {
         
         try {
             
-            if (checkTable("JOBS", dbConnection, schema) == false) {
+            if (checkTable("JOBS", dbConnection) == false) {
                 
                 System.out.println("Creating jobs table");
                 statement = dbConnection.createStatement();
@@ -594,7 +620,7 @@ public class BankQuery {
         
     }
     
-    private boolean checkTable(String tableName, Connection connection, String schema) {
+    private boolean checkTable(String tableName, Connection connection) {
         // Checks for the existence of a table within a database
         
         boolean tableExists;

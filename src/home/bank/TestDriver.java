@@ -57,8 +57,8 @@ public class TestDriver {
     void checkUserPassword(String userName, String password, 
             String schema, BankQuery query) {
         
-        int userID = query.lookupUserID(userName, schema);
-        String hashIn = query.lookupUserHash(userID, schema);
+        int userID = query.lookupUserID(userName);
+        String hashIn = query.lookupUserHash(userID);
         
         if(User.hashPassword(password, userName).equals(hashIn)) {
             System.out.println("Welcome, user " + userName);

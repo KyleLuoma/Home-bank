@@ -32,7 +32,7 @@ public class Transaction {
     public Transaction ( BankQuery query, int creditAcccount, int debitAccount,
                          double transactionAmount, String schema) {
         
-        this.transactionID = query.getHighestID(schema, "TRANSACTIONS") + 1;
+        this.transactionID = query.getHighestID("TRANSACTIONS") + 1;
         
         this.creditAccount = creditAcccount;
         

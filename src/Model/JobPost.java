@@ -35,7 +35,7 @@ public class JobPost {
         //Generates a new job, with a unique ID.
         
         
-        this.ID = query.getHighestID(schema, "JOBS") + 1;
+        this.ID = query.getHighestID("JOBS") + 1;
         
         this.postedByID = postedByID;
         

@@ -53,7 +53,7 @@ public class User {
         this.userName = "" + firstName.substring(0, 1).toUpperCase() 
                 + lastName.toUpperCase();
         
-        this.ID = query.getHighestID(schema, "USERS") + 1;
+        this.ID = query.getHighestID("USERS") + 1;
         
         this.dateCreated = new Date(new java.util.Date().getTime());
         

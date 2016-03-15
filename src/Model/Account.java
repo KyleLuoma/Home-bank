@@ -38,7 +38,7 @@ public class Account {
             String accountName, String type, String schema) {
         //Generates a new account, with a unique ID.
         
-        this.ID = query.getHighestID(schema, "ACCOUNTS") + 1;
+        this.ID = query.getHighestID("ACCOUNTS") + 1;
         
         this.holderID = holderID;
         
