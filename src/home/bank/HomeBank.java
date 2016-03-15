@@ -5,7 +5,7 @@
  */
 package home.bank;
 
-import java.sql.Connection;
+
 import DBManager.*;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -41,29 +41,39 @@ public class HomeBank extends Application{
     public void start(Stage primaryStage) {
         
         primaryStage.show();
-        String userNamePassword[] = this.login(); //Get username and password
         
+        //show login screen and get username and password:
+        String userNamePassword[] = this.login(); //Get username at [0] and password at [1]
+        
+        //use provided login and password to connecto to database:
         Connect connector = new Connect(userNamePassword[0], userNamePassword[1]); 
         BankQuery query = new BankQuery(connector.getConnection());
+        
+        //default schema value is MAIN:
         String schema = "MAIN";
-        System.out.println("OUTPUT");
+
         TestDriver testDriver = new TestDriver();
         
     }
     
     public String[] login() {
+        //set the stage:
         Stage loginScreen = new Stage();
         loginScreen.setTitle("Home Bank Login");
         GridPane grid = new GridPane();
+        //message text:
         Text loadingOutput = new Text();
+        String text = "Please enter your username and password:";
+        loadingOutput.setText(text);
+        //field labels:
         Label userName = new Label("User Name:   ");
         Label password = new Label("Password:   ");
+        //field objects:
         TextField userNameInput = new TextField();
         PasswordField passwordInput = new PasswordField();
-        Button loginButton = new Button("Sign In");
-        Connect newConnection = new Connect();
         String[] userInput = new String[2];
-        
+        //button(s):
+        Button loginButton = new Button("Sign In");
         loginButton.setOnAction(new EventHandler<ActionEvent> () {
             
             @Override
@@ -74,9 +84,7 @@ public class HomeBank extends Application{
             }
         });
         
-        String text = "Please enter your username and password:";
-        
-        loadingOutput.setText(text);
+        //scene build:
         grid.add(loadingOutput,     1, 1, 2, 1);
         grid.add(userName,          1, 2, 1, 1);
         grid.add(userNameInput,     2, 2, 1, 1);
@@ -84,9 +92,11 @@ public class HomeBank extends Application{
         grid.add(passwordInput,     2, 3, 1, 1);
         grid.add(loginButton,       1, 4, 2, 1);
         grid.setAlignment(Pos.CENTER);
+        
+        //show the screen, wait for button press:
         loginScreen.setScene(new Scene(grid, 320, 240));
         loginScreen.showAndWait();
-
+        
         return userInput;
    
     }
