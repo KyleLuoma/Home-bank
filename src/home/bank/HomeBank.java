@@ -130,7 +130,7 @@ public class HomeBank extends Application {
         grid.add(password,          1, 3, 1, 1);
         grid.add(passwordInput,     2, 3, 1, 1);
         grid.add(loginButton,       1, 4, 2, 1);
-        grid.add(newUserButton,     1, 5, 2, 1);
+        grid.add(newUserButton,     2, 4, 2, 1);
         grid.setAlignment(Pos.CENTER);
         loginScreen.setScene(new Scene(grid, 320, 240));
         
@@ -185,6 +185,8 @@ public class HomeBank extends Application {
         Text instructionsText = new Text();
         instructionsText.setText(instructions);
         
+        
+        
         //Labels:
         Label firstNameLabel = new Label("First name:    ");
         Label lastNameLabel = new Label("Last name:    ");
@@ -204,7 +206,9 @@ public class HomeBank extends Application {
         PasswordField confirmPasswordField = new PasswordField();
         
         //Buttons:
-        Button createUserButton = new Button("Create user");         
+        Button createUserButton = new Button("Create user");
+        
+        //Bindings:
         
         //Events:
         
@@ -215,14 +219,15 @@ public class HomeBank extends Application {
         grid.add(firstNameField,        2, 2, 1, 1);
         grid.add(lastNameLabel,         1, 3, 1, 1);
         grid.add(lastNameField,         2, 3, 1, 1);
-        grid.add(roleLabel,             1, 4, 1, 1);
-        grid.add(roles,                 2, 4, 1, 1);
-        grid.add(passwordLabel,         1, 5, 1, 1);
-        grid.add(passwordField,         2, 5, 1, 1);
-        grid.add(confirmPasswordLabel,  1, 6, 1, 1);
-        grid.add(confirmPasswordField,  2, 6, 1, 1);
+        grid.add(userNameLabel,         1, 4, 1, 1);
+        grid.add(roleLabel,             1, 5, 1, 1);
+        grid.add(roles,                 2, 5, 1, 1);
+        grid.add(passwordLabel,         1, 6, 1, 1);
+        grid.add(passwordField,         2, 6, 1, 1);
+        grid.add(confirmPasswordLabel,  1, 7, 1, 1);
+        grid.add(confirmPasswordField,  2, 7, 1, 1);
         
-        grid.add(createUserButton,      4, 10, 1, 1);
+        grid.add(createUserButton,      1, 10, 1, 1);
         
         //Display:
         userCreationScreen.setScene(new Scene(grid, 640, 480));
