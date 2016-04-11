@@ -9,11 +9,10 @@ import java.sql.Connection;
 import DBManager.*;
 import Model.User;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -66,6 +65,14 @@ public class HomeBank extends Application {
             if(correctCredentials == false) {
                 lastLoginFailed = true;
             }
+            if(userInput[2].equals("USERCLOSED")) {
+                break;
+            }
+            if(userInput[2].equals("NEWUSERSELECTED")) {
+                System.out.println("Loading user creation window...");
+                createNewUser(schema, query, connection);
+                lastLoginFailed = false;
+            }
         } while(!correctCredentials);
         
         //Load user input username into role as activeUser:
@@ -79,8 +86,10 @@ public class HomeBank extends Application {
     public String[] login(boolean lastLoginFailed) {
         //JAVAFX GUI-Based login screen:
         
-        String[] userInput = new String[2];
+        String[] userInput = new String[3];
+        userInput[0] = userInput[1] = "";
         
+        //Stage setup:
         Stage loginScreen = new Stage();
         loginScreen.setTitle("Homebank Login");
         GridPane grid = new GridPane();
@@ -91,20 +100,29 @@ public class HomeBank extends Application {
         TextField userNameInput = new TextField();
         PasswordField passwordInput = new PasswordField();
         Button loginButton = new Button("Sign In");
+        Button newUserButton = new Button("Create new user");
         
-        loginButton.setOnAction(new EventHandler<ActionEvent> () {
-            
-            @Override
-            public void handle(ActionEvent e) {
-                userInput[0] = userNameInput.getText();
-                userInput[1] = passwordInput.getText();
-                loginScreen.close();
-            }           
+        //Events:
+        loginButton.setOnAction((event) -> {
+            userInput[0] = userNameInput.getText();
+            userInput[1] = passwordInput.getText();
+            userInput[2] = "";
+            loginScreen.close();
+        });
+        
+        newUserButton.setOnAction((event) -> {
+            userInput[2] = "NEWUSERSELECTED";
+            loginScreen.close();
+        });
+        
+        loginScreen.setOnCloseRequest((event) -> { 
+            userInput[2] = "USERCLOSED";
         });
         
         String text = "Please enter your username and password";
         String incorrect = "Incorrect username or password, please try again.";
         
+        //Grid setup:
         loadingOutput.setText(text);
         grid.add(loadingOutput,     1, 1, 2, 1);
         grid.add(userName,          1, 2, 1, 1);
@@ -112,13 +130,14 @@ public class HomeBank extends Application {
         grid.add(password,          1, 3, 1, 1);
         grid.add(passwordInput,     2, 3, 1, 1);
         grid.add(loginButton,       1, 4, 2, 1);
+        grid.add(newUserButton,     1, 5, 2, 1);
         grid.setAlignment(Pos.CENTER);
         loginScreen.setScene(new Scene(grid, 320, 240));
         
         //Display "incorrect username... if last login failed:
         incorrectCredentials.setText(incorrect);
         if(lastLoginFailed == true){
-            grid.add(incorrectCredentials, 1, 5, 3, 1);
+            grid.add(incorrectCredentials, 1, 6, 3, 1);
         }
         
         loginScreen.showAndWait();
@@ -131,9 +150,7 @@ public class HomeBank extends Application {
             userInput[1] = "NOENTRY";
         }
         
-        
         return userInput;
-        
     }
     
     boolean checkUserPassword(String userName, String password, String schema,
@@ -154,8 +171,65 @@ public class HomeBank extends Application {
         }
         
         return correct;
+    }
+    
+    void createNewUser(String schema, BankQuery query, Connection connection) {
         
-    }    
+        Stage userCreationScreen = new Stage();
+        userCreationScreen.setTitle("Enter new user information");
+        GridPane grid = new GridPane();
+        
+        //Text:
+        String instructions = "Please enter your new user information and"
+                + " press the \"Create user\" button.";
+        Text instructionsText = new Text();
+        instructionsText.setText(instructions);
+        
+        //Labels:
+        Label firstNameLabel = new Label("First name:    ");
+        Label lastNameLabel = new Label("Last name:    ");
+        Label passwordLabel = new Label("Password:    ");
+        Label confirmPasswordLabel = new Label("Confirm Password:    ");
+        Label roleLabel = new Label("Select role:    ");
+        Label userNameLabel = new Label("Username:    ");
+        
+        //Combo boxes:
+        ComboBox roles = new ComboBox();
+        roles.getItems().addAll("Parent", "Child");
+        
+        //Fields:
+        TextField firstNameField = new TextField();
+        TextField lastNameField = new TextField();
+        PasswordField passwordField = new PasswordField();
+        PasswordField confirmPasswordField = new PasswordField();
+        
+        //Buttons:
+        Button createUserButton = new Button("Create user");         
+        
+        //Events:
+        
+        //Grid setup:
+        grid.setAlignment(Pos.CENTER);
+        grid.add(instructionsText,      1, 1, 3, 1);
+        grid.add(firstNameLabel,        1, 2, 1, 1);
+        grid.add(firstNameField,        2, 2, 1, 1);
+        grid.add(lastNameLabel,         1, 3, 1, 1);
+        grid.add(lastNameField,         2, 3, 1, 1);
+        grid.add(roleLabel,             1, 4, 1, 1);
+        grid.add(roles,                 2, 4, 1, 1);
+        grid.add(passwordLabel,         1, 5, 1, 1);
+        grid.add(passwordField,         2, 5, 1, 1);
+        grid.add(confirmPasswordLabel,  1, 6, 1, 1);
+        grid.add(confirmPasswordField,  2, 6, 1, 1);
+        
+        grid.add(createUserButton,      4, 10, 1, 1);
+        
+        //Display:
+        userCreationScreen.setScene(new Scene(grid, 640, 480));
+        userCreationScreen.showAndWait();
+        
+    }
+    
 }
     
 
