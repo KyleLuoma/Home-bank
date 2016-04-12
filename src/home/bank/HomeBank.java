@@ -52,7 +52,7 @@ public class HomeBank extends Application {
         
         //ParentUser testUser = testDriver.newUserObject(schema, query);
 
-        testDriver.checkUserPassword("KLUOMA", "password", schema, query);
+        //testDriver.checkUserPassword("KLUOMA", "password", schema, query);
        
         //Present login screen, get user input and check login credientials:
         String[] userInput;
@@ -157,13 +157,15 @@ public class HomeBank extends Application {
             BankQuery query) {
         //Accesses the database to check a given username and password hash
         
+        System.out.println("Verifying username and password combination.");
+        
         boolean correct = false;
         
         int userID = query.lookupUserID(userName);
         String hashIn = query.lookupUserHash(userID);
         
         if(User.hashPassword(password, userName).equals(hashIn)) {
-            System.out.println("Welcome, user " + userName);
+            System.out.println("Password for " + userName + " is correct.");
             correct = true;
         } else {
             System.out.println("Incorrect credentials");
