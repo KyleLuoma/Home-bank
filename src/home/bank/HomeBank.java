@@ -9,6 +9,8 @@ import java.sql.Connection;
 import DBManager.*;
 import Model.User;
 import javafx.application.Application;
+import javafx.beans.binding.BooleanBinding;
+import javafx.beans.property.StringProperty;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -208,7 +210,12 @@ public class HomeBank extends Application {
         //Buttons:
         Button createUserButton = new Button("Create user");
         
+        //Properties:
+        StringProperty passwordOne;
+        StringProperty passwordTwo;
+        
         //Bindings:
+        BooleanBinding checkPassword = passwordOne.equals(passwordTwo);
         
         //Events:
         
