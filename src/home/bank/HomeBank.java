@@ -10,7 +10,8 @@ import DBManager.*;
 import Model.User;
 import javafx.application.Application;
 import javafx.beans.binding.BooleanBinding;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -213,13 +214,21 @@ public class HomeBank extends Application {
         Button createUserButton = new Button("Create user");
         
         //Properties:
-        StringProperty passwordOne;
-        StringProperty passwordTwo;
+        SimpleStringProperty passwordCheck = new SimpleStringProperty();
+        SimpleStringProperty confirmPasswordCheck = new SimpleStringProperty();
         
         //Bindings:
-        BooleanBinding checkPassword = passwordOne.equals(passwordTwo);
+        
+        //Bind password to confirmPassword and bind boolean to check equality
+        passwordCheck.bind(passwordField.textProperty());
+        confirmPasswordCheck.bind(confirmPasswordField.textProperty());      
+        BooleanBinding passwordsMatch = passwordCheck.isEqualTo(confirmPasswordCheck);
         
         //Events:
+        
+        createUserButton.setOnAction((event) -> {
+                System.out.println(passwordsMatch.getValue());
+            });
         
         //Grid setup:
         grid.setAlignment(Pos.CENTER);
