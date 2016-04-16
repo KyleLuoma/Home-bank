@@ -10,6 +10,7 @@ import java.sql.Array;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -27,6 +28,8 @@ public class BankQuery {
     private Connection dbConnection = null;
         
     private Statement statement = null;
+    
+    private PreparedStatement preparedStatement = null;
     
     private ResultSet result = null;
     
@@ -241,12 +244,14 @@ public class BankQuery {
     }
     
     public ResultSet getUserData(int userID) {
-        
-        String getUserQuery
-                = "SELECT * FROM MAIN.USERS WHERE ID = " + userID;
-        System.out.println(getUserQuery);
+
+        String preparedQuery = "SELECT * FROM MAIN.USERS WHERE ID = ?";        
+
         try {
-            result = statement.executeQuery(getUserQuery);
+            preparedStatement = dbConnection.prepareStatement(preparedQuery);
+            preparedStatement.setString(1, "" + userID);
+            result = preparedStatement.executeQuery();
+            preparedStatement.clearBatch();
         } catch(SQLException e) {
             System.out.println(e);
         }
