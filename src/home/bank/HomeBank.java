@@ -106,7 +106,7 @@ public class HomeBank extends Application {
         
         //Events:
         loginButton.setOnAction((event) -> {
-            userInput[0] = userNameInput.getText();
+            userInput[0] = userNameInput.getText().toUpperCase();
             userInput[1] = passwordInput.getText();
             userInput[2] = "";
             loginScreen.close();
@@ -177,8 +177,9 @@ public class HomeBank extends Application {
         return correct;
     }
     
-    void createNewUser(String schema, BankQuery query, Connection connection) {
+    User createNewUser(String schema, BankQuery query, Connection connection) {
         
+        User newUser = new User("DEFAULT", "DEFAULT", "DEFAULT", 0, query, schema, "");
         Stage userCreationScreen = new Stage();
         userCreationScreen.setTitle("Enter new user information");
         GridPane grid = new GridPane();
@@ -199,6 +200,10 @@ public class HomeBank extends Application {
         Label roleLabel = new Label("Select role:    ");
         Label userNameLabel = new Label("Username:    ");
         Label passwordUnmatch = new Label(" Passwords do not match.");
+        Label requiredFields = new Label(" Please fill out all fields including "
+                + "a password.");
+        requiredFields.setVisible(false);
+        Label generatedUserName = new Label("");
         
         //Combo boxes:
         ComboBox roles = new ComboBox();
@@ -224,15 +229,42 @@ public class HomeBank extends Application {
         passwordTwo.bind(confirmPasswordField.textProperty());
         passwordUnmatch.visibleProperty()
                        .bind(passwordsNotMatch);
+        generatedUserName.textProperty().bind(
+                firstNameField.textProperty().concat(lastNameField.textProperty())
+            );
         
         //Events:
         
         createUserButton.setOnAction((event) ->{
-            if(passwordsNotMatch.get()){
-                System.out.println("The passwords match!");
-            } else {
-                System.out.println("The passwords do not match!");
-            }
+           if(passwordsNotMatch.get() == false           &
+                   !firstNameField.getText().equals("")  &
+                   !lastNameField.getText().equals("")   &
+                   !roles.getSelectionModel()
+                        .getSelectedItem()
+                        .equals("")                      &
+                   !passwordField.getText().equals("")
+                   ) {
+               newUser.setFirstName(firstNameField.getText());
+               newUser.setLastName(lastNameField.getText());
+               newUser.setUserName(newUser.getFirstName().toUpperCase() 
+                       + newUser.getLastName().toUpperCase());
+               newUser.setRole(
+                   roles.getSelectionModel()
+                       .getSelectedItem()
+                       .toString()
+               );
+               newUser.setLevel(1);
+               newUser.setPasswordHash(passwordField.getText());
+               if(query.putUser(newUser)) {
+                   userCreationScreen.close();
+               } else {
+                   System.out.println("The user was not correctly added "
+                           + "to the database");
+               }
+           } else {
+               requiredFields.visibleProperty().set(true);
+               System.out.println(roles.getSelectionModel().getSelectedItem());
+           }
         });
         
         //Grid setup:
@@ -243,6 +275,7 @@ public class HomeBank extends Application {
         grid.add(lastNameLabel,         1, 3, 1, 1);
         grid.add(lastNameField,         2, 3, 1, 1);
         grid.add(userNameLabel,         1, 4, 1, 1);
+        grid.add(generatedUserName,     2, 4, 1, 1);
         grid.add(roleLabel,             1, 5, 1, 1);
         grid.add(roles,                 2, 5, 1, 1);
         grid.add(passwordLabel,         1, 6, 1, 1);
@@ -252,10 +285,13 @@ public class HomeBank extends Application {
         grid.add(passwordUnmatch,       3, 7, 1, 1);
         
         grid.add(createUserButton,      1, 10, 1, 1);
+        grid.add(requiredFields,        1, 11, 1, 1);
         
         //Display:
         userCreationScreen.setScene(new Scene(grid, 640, 480));
         userCreationScreen.showAndWait();
+        
+        return newUser;
         
     }
     

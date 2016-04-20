@@ -37,6 +37,7 @@ public class User {
     
     private String hashedPassword;
     
+    
     public User(String lastName, String firstName, String role, int level, 
             BankQuery query, String schema, String ptPassword) {
         
@@ -50,8 +51,7 @@ public class User {
         
         this.role = role;
         
-        this.userName = "" + firstName.substring(0, 1).toUpperCase() 
-                + lastName.toUpperCase();
+        this.userName = "" + firstName.toUpperCase() + lastName.toUpperCase();
         
         this.ID = query.getHighestID("USERS") + 1;
         
@@ -82,12 +82,34 @@ public class User {
         
     }
     
+    //Accessor functions:
+       
+    public int getID() {
+        return this.ID;
+    }
+    
+    public String getFirstName() {
+        return this.firstName;
+    }
+    
+    public String getLastName() {
+        return this.lastName;
+    }
+    
     public String getUserName() {
         return this.userName;   
     }
     
     public String getPasswordHash() {
         return this.hashedPassword;
+    }
+    
+    public Date getDateCreated() {
+        return this.dateCreated;
+    }
+    
+    public String getRole() {
+        return this.role;
     }
     
     public String getPutQuery() {
@@ -116,6 +138,32 @@ public class User {
         
         return putUser;
         
+    }
+    
+    //Mutator functions:
+    
+    public void setFirstName(String newFirstName) {
+        this.firstName = newFirstName;
+    }
+    
+    public void setLastName(String newLastName) {
+        this.lastName = newLastName;
+    }
+    
+    public void setUserName(String newUserName) {
+        this.userName = newUserName;
+    }
+    
+    public void setRole(String newRole) {
+        this.role = newRole;
+    }
+    
+    public void setLevel(int newLevel) {
+        this.level = newLevel;
+    }
+    
+    public void setPasswordHash(String newPassword) {
+        this.hashedPassword = this.hashPassword(newPassword, this.userName);
     }
     
     public static String hashPassword(String password, String salt) {

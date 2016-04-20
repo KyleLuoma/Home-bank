@@ -188,23 +188,25 @@ public class BankQuery {
         
     }
     
-    public void putUser(User user) {
+    public boolean putUser(User user) {
                 
         String putUser = user.getPutQuery();
+        boolean success = true;        
         
         try {
         
             System.out.println("Tring to put a new user into the DB. \n"
                                + "sending SQL command: " + putUser + " to DB.");
             
-            statement.execute(putUser);
-            
+            statement.execute(putUser);      
+                        
         } catch(SQLException e) {
             
             System.out.println(e);
+            success = false;
             
         }
-        
+        return success;
     }
     
     public User getUserObject(int userID) {
