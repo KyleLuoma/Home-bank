@@ -236,6 +236,7 @@ public class HomeBank extends Application {
         //Events:
         
         createUserButton.setOnAction((event) ->{
+           //Check to ensure all fields are populated:
            if(passwordsNotMatch.get() == false           &
                    !firstNameField.getText().equals("")  &
                    !lastNameField.getText().equals("")   &
@@ -244,6 +245,7 @@ public class HomeBank extends Application {
                         .equals("")                      &
                    !passwordField.getText().equals("")
                    ) {
+               //Apply input from fields to newUser object:
                newUser.setFirstName(firstNameField.getText());
                newUser.setLastName(lastNameField.getText());
                newUser.setUserName(newUser.getFirstName().toUpperCase() 
@@ -253,7 +255,7 @@ public class HomeBank extends Application {
                        .getSelectedItem()
                        .toString()
                );
-               newUser.setLevel(1);
+               newUser.setLevel(1); //Arbitrary at this point
                newUser.setPasswordHash(passwordField.getText());
                if(query.putUser(newUser)) {
                    userCreationScreen.close();
