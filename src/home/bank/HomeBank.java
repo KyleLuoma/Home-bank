@@ -10,7 +10,7 @@ import DBManager.*;
 import Model.User;
 import javafx.application.Application;
 import javafx.beans.binding.BooleanBinding;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -198,6 +198,7 @@ public class HomeBank extends Application {
         Label confirmPasswordLabel = new Label("Confirm Password:    ");
         Label roleLabel = new Label("Select role:    ");
         Label userNameLabel = new Label("Username:    ");
+        Label passwordUnmatch = new Label(" Passwords do not match.");
         
         //Combo boxes:
         ComboBox roles = new ComboBox();
@@ -213,13 +214,26 @@ public class HomeBank extends Application {
         Button createUserButton = new Button("Create user");
         
         //Properties:
-        StringProperty passwordOne;
-        StringProperty passwordTwo;
+        SimpleStringProperty passwordOne = new SimpleStringProperty();
+        SimpleStringProperty passwordTwo = new SimpleStringProperty();
+        BooleanBinding passwordsNotMatch;
         
         //Bindings:
-        BooleanBinding checkPassword = passwordOne.equals(passwordTwo);
+        passwordsNotMatch = passwordOne.isNotEqualTo(passwordTwo);
+        passwordOne.bind(passwordField.textProperty());
+        passwordTwo.bind(confirmPasswordField.textProperty());
+        passwordUnmatch.visibleProperty()
+                       .bind(passwordsNotMatch);
         
         //Events:
+        
+        createUserButton.setOnAction((event) ->{
+            if(passwordsNotMatch.get()){
+                System.out.println("The passwords match!");
+            } else {
+                System.out.println("The passwords do not match!");
+            }
+        });
         
         //Grid setup:
         grid.setAlignment(Pos.CENTER);
@@ -235,6 +249,7 @@ public class HomeBank extends Application {
         grid.add(passwordField,         2, 6, 1, 1);
         grid.add(confirmPasswordLabel,  1, 7, 1, 1);
         grid.add(confirmPasswordField,  2, 7, 1, 1);
+        grid.add(passwordUnmatch,       3, 7, 1, 1);
         
         grid.add(createUserButton,      1, 10, 1, 1);
         
