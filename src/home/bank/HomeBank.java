@@ -217,6 +217,7 @@ public class HomeBank extends Application {
         
         //Buttons:
         Button createUserButton = new Button("Create user");
+        Button cancelButton = new Button("Cancel");
         
         //Properties:
         SimpleStringProperty passwordOne = new SimpleStringProperty();
@@ -234,6 +235,8 @@ public class HomeBank extends Application {
             );
         
         //Events:
+        
+        cancelButton.setOnAction((event) -> { userCreationScreen.close(); });
         
         createUserButton.setOnAction((event) ->{
            //Check to ensure all fields are populated:
@@ -271,22 +274,23 @@ public class HomeBank extends Application {
         
         //Grid setup:
         grid.setAlignment(Pos.CENTER);
-        grid.add(instructionsText,      1, 1, 3, 1);
+        grid.add(instructionsText,      1, 1, 4, 1);
         grid.add(firstNameLabel,        1, 2, 1, 1);
-        grid.add(firstNameField,        2, 2, 1, 1);
+        grid.add(firstNameField,        3, 2, 1, 1);
         grid.add(lastNameLabel,         1, 3, 1, 1);
-        grid.add(lastNameField,         2, 3, 1, 1);
+        grid.add(lastNameField,         3, 3, 1, 1);
         grid.add(userNameLabel,         1, 4, 1, 1);
-        grid.add(generatedUserName,     2, 4, 1, 1);
+        grid.add(generatedUserName,     3, 4, 1, 1);
         grid.add(roleLabel,             1, 5, 1, 1);
-        grid.add(roles,                 2, 5, 1, 1);
+        grid.add(roles,                 3, 5, 1, 1);
         grid.add(passwordLabel,         1, 6, 1, 1);
-        grid.add(passwordField,         2, 6, 1, 1);
+        grid.add(passwordField,         3, 6, 1, 1);
         grid.add(confirmPasswordLabel,  1, 7, 1, 1);
-        grid.add(confirmPasswordField,  2, 7, 1, 1);
-        grid.add(passwordUnmatch,       3, 7, 1, 1);
+        grid.add(confirmPasswordField,  3, 7, 1, 1);
+        grid.add(passwordUnmatch,       4, 7, 1, 1);
         
         grid.add(createUserButton,      1, 10, 1, 1);
+        grid.add(cancelButton,          2, 10, 2, 1);
         grid.add(requiredFields,        1, 11, 1, 1);
         
         //Display:
