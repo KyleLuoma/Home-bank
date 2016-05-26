@@ -199,7 +199,7 @@ public class HomeBank extends Application {
         Label confirmPasswordLabel = new Label("Confirm Password:    ");
         Label roleLabel = new Label("Select role:    ");
         Label userNameLabel = new Label("Username:    ");
-        Label passwordUnmatch = new Label(" Passwords do not match.");
+        Label passwordMismatch = new Label(" Passwords do not match.");
         Label requiredFields = new Label(" Please fill out all fields including "
                 + "a password.");
         requiredFields.setVisible(false);
@@ -207,7 +207,8 @@ public class HomeBank extends Application {
         
         //Combo boxes:
         ComboBox roles = new ComboBox();
-        roles.getItems().addAll("Parent", "Child");
+        roles.getItems().addAll("Make a selection", "Parent", "Child");
+        roles.getSelectionModel().select(0);
         
         //Fields:
         TextField firstNameField = new TextField();
@@ -228,7 +229,7 @@ public class HomeBank extends Application {
         passwordsNotMatch = passwordOne.isNotEqualTo(passwordTwo);
         passwordOne.bind(passwordField.textProperty());
         passwordTwo.bind(confirmPasswordField.textProperty());
-        passwordUnmatch.visibleProperty()
+        passwordMismatch.visibleProperty()
                        .bind(passwordsNotMatch);
         generatedUserName.textProperty().bind(
                 firstNameField.textProperty().concat(lastNameField.textProperty())
@@ -243,9 +244,8 @@ public class HomeBank extends Application {
            if(passwordsNotMatch.get() == false           &
                    !firstNameField.getText().equals("")  &
                    !lastNameField.getText().equals("")   &
-                   !roles.getSelectionModel()
-                        .getSelectedItem()
-                        .equals("")                      &
+                   roles.getSelectionModel()
+                        .getSelectedIndex() != 0         &
                    !passwordField.getText().equals("")
                    ) {
                //Apply input from fields to newUser object:
@@ -287,7 +287,7 @@ public class HomeBank extends Application {
         grid.add(passwordField,         3, 6, 1, 1);
         grid.add(confirmPasswordLabel,  1, 7, 1, 1);
         grid.add(confirmPasswordField,  3, 7, 1, 1);
-        grid.add(passwordUnmatch,       4, 7, 1, 1);
+        grid.add(passwordMismatch,       4, 7, 1, 1);
         
         grid.add(createUserButton,      1, 10, 1, 1);
         grid.add(cancelButton,          2, 10, 2, 1);
