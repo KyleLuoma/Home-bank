@@ -81,6 +81,20 @@ public class HomeBank extends Application {
         if(correctCredentials){
             activeUser = query.getUserObject(query.lookupUserID(userInput[0]));
             System.out.println("User object for " + activeUser.getUserName());
+        } else {
+            activeUser = null;
+        }
+        
+        if(activeUser.getRole().toLowerCase().equals("parent")) {
+            //open the parent view
+            parentView();
+        } 
+        
+        
+        
+        if(activeUser.getRole().toLowerCase().equals("child")) {
+            //open the child view
+            childView();
         }
         
     }
@@ -299,6 +313,16 @@ public class HomeBank extends Application {
         
         return newUser;
         
+    }
+    
+    void parentView() {
+        //Placeholder for parent dashboard view
+        System.out.println("Parent view loading");
+    }
+    
+    void childView() {
+        //Placeholder for child dashboard view
+        System.out.println("Child view loading");
     }
     
 }
