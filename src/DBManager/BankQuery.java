@@ -366,20 +366,25 @@ public class BankQuery {
         ArrayList<Account> userAccounts = new ArrayList();
         
         String getUserAccountID 
-                = "SELECT(ID) FROM " + schema + ".ACCOUNTS "
+                = "SELECT * FROM " + schema + ".ACCOUNTS "
                 + "WHERE HOLDERID = " + userID;
         
         try {
             result = statement.executeQuery(getUserAccountID);
             while(result.next()) {
-                userAccounts.add(this.getAccountObject(result.getRow()));
-                System.out.println(result.getRow());
+                userAccounts.add(this.getAccountObject(result.getInt("ID")));
             }
         } catch (SQLException e) {
             System.out.println(e);
             System.out.println("Error encountered while executing statement " 
                     + getUserAccountID);
         }
+        
+        //test:
+        for(int i = 0; i < userAccounts.size(); i++) {
+            System.out.println(userAccounts.get(i).getID());
+        }
+        
         
         return userAccounts;
     }

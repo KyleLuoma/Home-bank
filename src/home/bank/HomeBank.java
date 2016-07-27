@@ -94,7 +94,7 @@ public class HomeBank extends Application {
         
         if(activeUser.getRole().toLowerCase().equals("child")) {
             //open the child view
-            childView(activeUser);
+            childView(activeUser, query);
         }
         
     }
@@ -320,7 +320,7 @@ public class HomeBank extends Application {
         System.out.println("Parent view loading");
     }
     
-    void childView(User activeUser) {
+    void childView(User activeUser, BankQuery query) {
         //Placeholder for child dashboard view
         System.out.println("Child view loading");
         
@@ -329,6 +329,8 @@ public class HomeBank extends Application {
         GridPane grid = new GridPane();
         
         //Text:
+        query.getUserAccounts(2);
+        
         
         childView.setScene(new Scene(grid, 640, 480));
         childView.showAndWait();
