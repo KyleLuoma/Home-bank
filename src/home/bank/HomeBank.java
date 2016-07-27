@@ -329,7 +329,7 @@ public class HomeBank extends Application {
         GridPane grid = new GridPane();
         
         //Text:
-        query.getUserAccounts(2);
+        query.getUserAccounts(activeUser.getID());
         
         
         childView.setScene(new Scene(grid, 640, 480));

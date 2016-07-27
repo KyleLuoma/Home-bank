@@ -381,6 +381,7 @@ public class BankQuery {
         }
         
         //test:
+        System.out.println("Retreived " + userAccounts.size() + " accounts.");
         for(int i = 0; i < userAccounts.size(); i++) {
             System.out.println(userAccounts.get(i).getID());
         }
