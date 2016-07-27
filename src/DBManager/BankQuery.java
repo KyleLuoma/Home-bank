@@ -17,6 +17,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 
+
 /**
  * BankQuery class, singleton class used to handle all communications with the
  * bank database.
@@ -356,6 +357,31 @@ public class BankQuery {
                 + " balance = " + accountBalance);
 
         return accountBalance;        
+    }
+    
+    public ArrayList<Account> getUserAccounts(int userID) {
+        //Get all account IDs of accounts held by user from database and
+        //retrieve account objects for each account into an ArrayList
+        
+        ArrayList<Account> userAccounts = new ArrayList();
+        
+        String getUserAccountID 
+                = "SELECT(ID) FROM " + schema + ".ACCOUNTS "
+                + "WHERE HOLDERID = " + userID;
+        
+        try {
+            result = statement.executeQuery(getUserAccountID);
+            while(result.next()) {
+                userAccounts.add(this.getAccountObject(result.getRow()));
+                System.out.println(result.getRow());
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+            System.out.println("Error encountered while executing statement " 
+                    + getUserAccountID);
+        }
+        
+        return userAccounts;
     }
     
     public void createStandardTables() {
