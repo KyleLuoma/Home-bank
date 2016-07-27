@@ -94,7 +94,7 @@ public class HomeBank extends Application {
         
         if(activeUser.getRole().toLowerCase().equals("child")) {
             //open the child view
-            childView();
+            childView(activeUser);
         }
         
     }
@@ -320,9 +320,19 @@ public class HomeBank extends Application {
         System.out.println("Parent view loading");
     }
     
-    void childView() {
+    void childView(User activeUser) {
         //Placeholder for child dashboard view
         System.out.println("Child view loading");
+        
+        Stage childView = new Stage();
+        childView.setTitle("Welcome, " + activeUser.getFirstName());
+        GridPane grid = new GridPane();
+        
+        //Text:
+        
+        childView.setScene(new Scene(grid, 640, 480));
+        childView.showAndWait();
+        
     }
     
 }
