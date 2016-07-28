@@ -370,9 +370,12 @@ public class BankQuery {
                 + "WHERE HOLDERID = " + userID;
         
         try {
-            result = statement.executeQuery(getUserAccountID);
-            while(result.next()) {
-                userAccounts.add(this.getAccountObject(result.getInt("ID")));
+            ResultSet indepResult = statement.executeQuery(getUserAccountID);
+            
+            while(indepResult.next()) {
+                userAccounts.add(this.getAccountObject(indepResult.getInt("ID")));
+                System.out.println("Added account "
+                        + indepResult.getString("ACCOUNTNAME") + " to userAccounts ArrayList");
             }
         } catch (SQLException e) {
             System.out.println(e);

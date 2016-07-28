@@ -8,6 +8,7 @@ package home.bank;
 import java.sql.Connection;
 import DBManager.*;
 import Model.User;
+import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.SimpleStringProperty;
@@ -328,8 +329,11 @@ public class HomeBank extends Application {
         childView.setTitle("Welcome, " + activeUser.getFirstName());
         GridPane grid = new GridPane();
         
+        //Account information retrieval:
+        ArrayList accountInformation = query.getUserAccounts(activeUser.getID());
+        
         //Text:
-        query.getUserAccounts(activeUser.getID());
+        
         
         
         childView.setScene(new Scene(grid, 640, 480));
