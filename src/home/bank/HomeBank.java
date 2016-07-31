@@ -7,6 +7,7 @@ package home.bank;
 
 import java.sql.Connection;
 import DBManager.*;
+import Model.Account;
 import Model.User;
 import java.util.ArrayList;
 import javafx.application.Application;
@@ -330,13 +331,12 @@ public class HomeBank extends Application {
         GridPane grid = new GridPane();
         
         //Account information retrieval:
-        ArrayList accountInformation = query.getUserAccounts(activeUser.getID());
+        ArrayList<Account> activeAccounts = query.getUserAccounts(activeUser.getID());
         
         //Text:
         Text userAccountInfo = new Text();
-        userAccountInfo.setText(
-                "" + activeUser.getFirstName() + " " + activeUser.getLastName()
-                + " has " + accountInformation.size() + " accounts:\n"
+        userAccountInfo.setText("" + activeUser.getFirstName() + " " + activeUser.getLastName()
+                + " has " + activeAccounts.size() + " accounts:\n"
         );
         
         //Grid setup:
