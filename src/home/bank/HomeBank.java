@@ -333,8 +333,15 @@ public class HomeBank extends Application {
         ArrayList accountInformation = query.getUserAccounts(activeUser.getID());
         
         //Text:
+        Text userAccountInfo = new Text();
+        userAccountInfo.setText(
+                "" + activeUser.getFirstName() + " " + activeUser.getLastName()
+                + " has " + accountInformation.size() + " accounts:\n"
+        );
         
-        
+        //Grid setup:
+        grid.setAlignment(Pos.CENTER);
+        grid.add(userAccountInfo,      1, 1, 4, 1);
         
         childView.setScene(new Scene(grid, 640, 480));
         childView.showAndWait();
