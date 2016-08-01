@@ -339,9 +339,18 @@ public class HomeBank extends Application {
                 + " has " + activeAccounts.size() + " accounts:\n"
         );
         
+        Text accountDetailText = new Text();
+        String accountDetails = "ACCOUNT:    BALANCE:\n";
+        for(int i = 0; i < activeAccounts.size(); i++) {
+            accountDetails = accountDetails + activeAccounts.get(i).getAccountType()
+                    + ":         " + activeAccounts.get(i).getBalance() + "\n";
+        }
+        accountDetailText.setText(accountDetails);
+        
         //Grid setup:
         grid.setAlignment(Pos.CENTER);
         grid.add(userAccountInfo,      1, 1, 4, 1);
+        grid.add(accountDetailText,    1, 2, 4, 1);
         
         childView.setScene(new Scene(grid, 640, 480));
         childView.showAndWait();

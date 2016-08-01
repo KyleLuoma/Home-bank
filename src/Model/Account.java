@@ -110,6 +110,12 @@ public class Account {
         
     }
     
+    public String getAccountType() {
+        
+        return this.type;
+        
+    }
+    
     public void setType(String type) {
         
         this.type = type;
