@@ -7,8 +7,9 @@ package Model;
 
 import java.sql.Date;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import DBManager.BankQuery;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleStringProperty;
 
 /**
  *
@@ -16,41 +17,33 @@ import DBManager.BankQuery;
  */
 public class Account {
       
-    private int ID;
-    
-    private int holderID;
-    
-    private int managerID;
-    
-    private double balance = 0;
-    
-    private Date dateCreated;
-    
-    private ResultSet transactionList = null;
-    
-    private String schema = "";
-    
-    private String accountName = "";
-    
+    private final int ID;    
+    private final int holderID;
+    private final int managerID;
+    private double balance = 0;  
+    private final Date dateCreated;    
+    private final ResultSet transactionList = null;    
+    private String schema = "";    
+    private String accountName = "";    
     private String type = "";         
+    private final SimpleStringProperty accountNameProperty;
+    private final SimpleStringProperty typeProperty;
+    private final SimpleDoubleProperty balanceProperty;
     
     public Account (BankQuery query, int holderID, int managerID, 
             String accountName, String type, String schema) {
         //Generates a new account, with a unique ID.
         
         this.ID = query.getHighestID("ACCOUNTS") + 1;
-        
-        this.holderID = holderID;
-        
-        this.managerID = managerID;
-        
-        dateCreated = new Date(new java.util.Date().getTime());
-        
-        this.accountName = accountName;
-        
-        this.type = type;
-        
+        this.holderID = holderID;        
+        this.managerID = managerID;       
+        dateCreated = new Date(new java.util.Date().getTime());       
+        this.accountName = accountName;        
+        this.type = type;       
         this.schema = schema;
+        this.accountNameProperty = new SimpleStringProperty(accountName);
+        this.typeProperty = new SimpleStringProperty(type);
+        this.balanceProperty = new SimpleDoubleProperty(balance);
         
         System.out.println("Account created on: " + dateCreated.toString());
         
@@ -61,71 +54,55 @@ public class Account {
             String type, String schema) {
         //Retrieves account from database
         
-        this.ID = accountID;
-        
-        this.holderID = holderID;
-        
-        this.managerID = managerID;
-        
-        this.dateCreated = dateCreated;
-        
-        this.balance = balance;
-        
-        this.accountName = accountName;
-        
-        this.type = type;
-        
+        this.ID = accountID;        
+        this.holderID = holderID;        
+        this.managerID = managerID;        
+        this.dateCreated = dateCreated;       
+        this.balance = balance;        
+        this.accountName = accountName;        
+        this.type = type;        
         this.schema = schema;
+        this.accountNameProperty = new SimpleStringProperty(accountName);
+        this.typeProperty = new SimpleStringProperty(type);
+        this.balanceProperty = new SimpleDoubleProperty(balance);
         
     }
     
        
-    public int getID() {
-        
-        return this.ID;
-        
+    public int getID() {       
+        return this.ID;      
     }
     
-    public double getBalance() {
-        
-        return this.balance;
-        
+    public double getBalance() {        
+        return this.balanceProperty.get();        
     }
     
-    public Date getDateCreated() {
-        
-        return this.dateCreated;
-        
+    public Date getDateCreated() {        
+        return this.dateCreated;        
     }
     
-    public int getHolderID() {
-        
-        return this.holderID;
-    
+    public int getHolderID() {        
+        return this.holderID;    
     }
     
-    public int getManagerID() {
-        
-        return this.managerID;
-        
+    public int getManagerID() {       
+        return this.managerID;        
     }
     
-    public String getAccountType() {
-        
-        return this.type;
-        
+    public String getType() {       
+        return this.typeProperty.get();        
     }
     
-    public void setType(String type) {
-        
-        this.type = type;
-        
+    public String getAccountName() {
+        return this.accountNameProperty.get();
     }
     
-    public void setBalance(double newBalance) {
-        
-        this.balance = newBalance;
-        
+    public void setType(String type) {        
+        typeProperty.set(type);        
+    }
+    
+    public void setBalance(double newBalance) {       
+        balanceProperty.set(newBalance);       
     }
     
     

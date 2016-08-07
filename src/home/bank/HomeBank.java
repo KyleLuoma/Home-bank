@@ -13,14 +13,21 @@ import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -332,6 +339,8 @@ public class HomeBank extends Application {
         
         //Account information retrieval:
         ArrayList<Account> activeAccounts = query.getUserAccounts(activeUser.getID());
+        ObservableList<Account> accountList = 
+                FXCollections.observableArrayList(activeAccounts);
         
         //Text:
         Text userAccountInfo = new Text();
@@ -339,18 +348,39 @@ public class HomeBank extends Application {
                 + " has " + activeAccounts.size() + " accounts:\n"
         );
         
-        Text accountDetailText = new Text();
-        String accountDetails = "ACCOUNT:    BALANCE:\n";
-        for(int i = 0; i < activeAccounts.size(); i++) {
-            accountDetails = accountDetails + activeAccounts.get(i).getAccountType()
-                    + ":         " + activeAccounts.get(i).getBalance() + "\n";
-        }
-        accountDetailText.setText(accountDetails);
+         //Table setup
+        TableView table = new TableView();
+        table.setEditable(false);
+        
+        TableColumn accountTypeCol = new TableColumn ("Account Type");
+        accountTypeCol.setCellValueFactory(
+                new PropertyValueFactory<>("type"));
+        
+        TableColumn accountNameCol = new TableColumn ("Account Name");
+        accountNameCol.setCellValueFactory(
+                new PropertyValueFactory<>("accountName"));
+        
+        TableColumn accountBalanceCol = new TableColumn ("Balance");
+        accountBalanceCol.setCellValueFactory(
+                new PropertyValueFactory<>("balance"));
+        
+        table.getColumns().addAll(accountTypeCol, accountNameCol, 
+                accountBalanceCol);
+
+        table.setItems(accountList);
+        table.setMaxHeight(activeAccounts.size() * 32 + 40);
+        table.setMinWidth(accountTypeCol.getWidth() + accountNameCol.getWidth()
+                + accountBalanceCol.getWidth() + 15);
+        
+        final VBox vbox = new VBox();
+        vbox.setSpacing(3);
+        vbox.setPadding(new Insets(10, 0, 0, 10));
+        vbox.getChildren().addAll(table);
         
         //Grid setup:
         grid.setAlignment(Pos.CENTER);
         grid.add(userAccountInfo,      1, 1, 4, 1);
-        grid.add(accountDetailText,    1, 2, 4, 1);
+        grid.add(vbox,                 1, 2, 4, 1);
         
         childView.setScene(new Scene(grid, 640, 480));
         childView.showAndWait();
