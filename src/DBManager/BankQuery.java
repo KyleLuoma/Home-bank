@@ -302,19 +302,34 @@ public class BankQuery {
         
     }
     
-    public ResultSet getAccountTransactions() {
+    public ArrayList getAccountTransactions(int accountID) {
         
         String getTransactionQuery 
-                = "SELECT * FROM " + schema + ".TRANSACTIONS"
-                + "ORDER BY ID";
+                = "SELECT * FROM " + schema + ".TRANSACTIONS "
+                + "WHERE CREDITACCOUNTID = " + accountID
+                + " OR DEBITACCOUNTID = " + accountID
+                + " ORDER BY ID";
+        
+        ArrayList<Transaction> transactionList = new ArrayList<>();
+        int listIndex = 0;
         
         try {
             result = statement.executeQuery(getTransactionQuery);
+            while(result.next()){
+                Transaction tempTransaction = new Transaction(
+                    result.getInt("ID"),
+                    result.getInt("CREDITACCOUNTID"),
+                    result.getInt("DEBITACCOUNTID"),
+                    result.getDouble("AMOUNT"),
+                    result.getDate("DATE"),
+                    result.getTime("TIME"));
+                transactionList.add(tempTransaction);
+            }
         } catch (SQLException e) {
             System.out.println(e);
         }
         
-        return result;
+        return transactionList;
     } 
     
     public double getAccountBalance(int accountID) {

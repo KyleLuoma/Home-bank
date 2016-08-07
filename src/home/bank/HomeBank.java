@@ -8,6 +8,7 @@ package home.bank;
 import java.sql.Connection;
 import DBManager.*;
 import Model.Account;
+import Model.Transaction;
 import Model.User;
 import java.util.ArrayList;
 import javafx.application.Application;
@@ -342,15 +343,34 @@ public class HomeBank extends Application {
         ObservableList<Account> accountList = 
                 FXCollections.observableArrayList(activeAccounts);
         
+        //Account transaction information retrieval:
+        /* ArrayList<ArrayList<Transaction>> transactionLists 
+                = new ArrayList<ArrayList<Transaction>>();
+
+        for(int i = 0; i < activeAccounts.size(); i++) {
+            transactionLists.add(
+                    query.getAccountTransactions(activeAccounts.get(i).getID()));
+            System.out.println(transactionLists.get(i).size() + " transactions"
+                    + " associated with account ID " 
+                    + activeAccounts.get(i).getID());
+        } 
+        
+        //Test transactionLists:
+        System.out.println("Transaction amount: " 
+                + transactionLists.get(0).get(0).getTransactionAmount());
+        
+        System.out.println("retrieved " + transactionLists.size() + " lists of "
+                    + "transactions from the database" );
+        */
         //Text:
         Text userAccountInfo = new Text();
         userAccountInfo.setText("" + activeUser.getFirstName() + " " + activeUser.getLastName()
                 + " has " + activeAccounts.size() + " accounts:\n"
         );
         
-         //Table setup
-        TableView table = new TableView();
-        table.setEditable(false);
+         //Accout Table setup
+        TableView accountTable = new TableView();
+        accountTable.setEditable(false);
         
         TableColumn accountTypeCol = new TableColumn ("Account Type");
         accountTypeCol.setCellValueFactory(
@@ -364,25 +384,78 @@ public class HomeBank extends Application {
         accountBalanceCol.setCellValueFactory(
                 new PropertyValueFactory<>("balance"));
         
-        table.getColumns().addAll(accountTypeCol, accountNameCol, 
+        accountTable.getColumns().addAll(accountTypeCol, accountNameCol, 
                 accountBalanceCol);
 
-        table.setItems(accountList);
-        table.setMaxHeight(activeAccounts.size() * 32 + 40);
-        table.setMinWidth(accountTypeCol.getWidth() + accountNameCol.getWidth()
+        accountTable.setItems(accountList);
+        accountTable.setMaxHeight(activeAccounts.size() * 32 + 40);
+        accountTable.setMinWidth(accountTypeCol.getWidth() + accountNameCol.getWidth()
                 + accountBalanceCol.getWidth() + 15);
         
-        final VBox vbox = new VBox();
-        vbox.setSpacing(3);
-        vbox.setPadding(new Insets(10, 0, 0, 10));
-        vbox.getChildren().addAll(table);
+        final VBox accountVbox = new VBox();
+        accountVbox.setSpacing(3);
+        accountVbox.setPadding(new Insets(10, 0, 0, 10));
+        accountVbox.getChildren().addAll(accountTable);
+        
+        //Transaction Table setup
+        TableView transactionTable = new TableView();
+        transactionTable.setEditable(false);
+        
+        TableColumn transactionIDCol = new TableColumn ("ID");
+        transactionIDCol.setCellValueFactory(
+                new PropertyValueFactory<>("transactionID"));
+        
+        TableColumn creditAccountCol = new TableColumn ("From Account");
+        creditAccountCol.setCellValueFactory(
+                new PropertyValueFactory<>("creditAccount"));
+        
+        TableColumn debitAccountCol = new TableColumn ("To Account");
+        debitAccountCol.setCellValueFactory(
+                new PropertyValueFactory<>("debitAccount"));
+        
+        TableColumn transactionAmountCol = new TableColumn ("Amount");
+        transactionAmountCol.setCellValueFactory(
+                new PropertyValueFactory<>("transactionAmount"));
+        
+        TableColumn transactionDateCol = new TableColumn ("Date");
+        transactionDateCol.setCellValueFactory(
+                new PropertyValueFactory<>("transactionDate"));
+        
+        TableColumn transactionTimeCol = new TableColumn ("Time");
+        transactionTimeCol.setCellValueFactory(
+                new PropertyValueFactory<>("transactionTime"));
+        
+        transactionTable.getColumns().addAll(transactionIDCol, creditAccountCol,
+                debitAccountCol, transactionAmountCol, transactionDateCol,
+                transactionTimeCol);
+        
+        //Currently just grabs first transaction list in array.
+        //Need to implement a feature to pull transactions from currently
+        //selected account.
+        ObservableList<Transaction> tempTransList 
+                = FXCollections.observableArrayList(
+                        query.getAccountTransactions(1));
+        
+        System.out.println("Observable list tempTransList contains " +
+                tempTransList.size() + " Transaction objects.");
+        System.out.println("The first Transaction in tempTransList has ID  "
+                + tempTransList.get(0).getID());
+        
+        transactionTable.setItems(tempTransList);
+        
+        final VBox transactionVbox = new VBox();
+        transactionVbox.setSpacing(3);
+        transactionVbox.setPadding(new Insets(10, 0, 0, 10));
+        transactionVbox.getChildren().addAll(transactionTable);
+        
         
         //Grid setup:
         grid.setAlignment(Pos.CENTER);
         grid.add(userAccountInfo,      1, 1, 4, 1);
-        grid.add(vbox,                 1, 2, 4, 1);
+        grid.add(accountVbox,          1, 2, 4, 1);
+        grid.add(transactionVbox,      1, 3, 4, 1);
         
-        childView.setScene(new Scene(grid, 640, 480));
+        childView.setScene(new Scene(grid, 640, 880));
         childView.showAndWait();
         
     }

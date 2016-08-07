@@ -73,8 +73,15 @@ public class Account {
         return this.ID;      
     }
     
-    public double getBalance() {        
+    public double getBalance() {
+        //System.out.println("Returning only double value of account balance from"
+        //        + "account.");
         return this.balanceProperty.get();        
+    }
+    
+    public SimpleDoubleProperty balanceProperty() {
+        //System.out.println("Returning balanceProperty from account.");
+        return this.balanceProperty;
     }
     
     public Date getDateCreated() {        
@@ -93,7 +100,13 @@ public class Account {
         return this.typeProperty.get();        
     }
     
+    public SimpleStringProperty accountNameProperty() {
+        //System.out.println("Returning accountNameProperty from account.");
+        return this.accountNameProperty;
+    }
+    
     public String getAccountName() {
+        //System.out.println("Returning only accountName string from account.");
         return this.accountNameProperty.get();
     }
     
@@ -102,7 +115,8 @@ public class Account {
     }
     
     public void setBalance(double newBalance) {       
-        balanceProperty.set(newBalance);       
+        balanceProperty.set(newBalance);
+        this.balance = newBalance;
     }
     
     
