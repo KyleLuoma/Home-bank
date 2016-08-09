@@ -13,6 +13,7 @@ import Model.User;
 import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.beans.binding.BooleanBinding;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -372,6 +373,10 @@ public class HomeBank extends Application {
         TableView accountTable = new TableView();
         accountTable.setEditable(false);
         
+        TableColumn accountIDCol = new TableColumn ("Account ID");
+        accountIDCol.setCellValueFactory(
+                new PropertyValueFactory<>("accountID"));
+        
         TableColumn accountTypeCol = new TableColumn ("Account Type");
         accountTypeCol.setCellValueFactory(
                 new PropertyValueFactory<>("type"));
@@ -384,8 +389,8 @@ public class HomeBank extends Application {
         accountBalanceCol.setCellValueFactory(
                 new PropertyValueFactory<>("balance"));
         
-        accountTable.getColumns().addAll(accountTypeCol, accountNameCol, 
-                accountBalanceCol);
+        accountTable.getColumns().addAll(accountIDCol, accountTypeCol, 
+                accountNameCol, accountBalanceCol);
 
         accountTable.setItems(accountList);
         accountTable.setMaxHeight(activeAccounts.size() * 32 + 40);
@@ -448,6 +453,13 @@ public class HomeBank extends Application {
         transactionVbox.setPadding(new Insets(10, 0, 0, 10));
         transactionVbox.getChildren().addAll(transactionTable);
         
+        //Properties:
+        SimpleIntegerProperty  accountTableSelection = 
+                new SimpleIntegerProperty(
+                        accountTable.getSelectionModel().getFocusedIndex());
+        
+        accountIDCol.getCellData(accountTableSelection.get());
+        //Bindings:
         
         //Grid setup:
         grid.setAlignment(Pos.CENTER);

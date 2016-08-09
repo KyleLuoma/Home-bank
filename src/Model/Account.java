@@ -9,6 +9,7 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import DBManager.BankQuery;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 /**
@@ -29,6 +30,7 @@ public class Account {
     private final SimpleStringProperty accountNameProperty;
     private final SimpleStringProperty typeProperty;
     private final SimpleDoubleProperty balanceProperty;
+    private final SimpleIntegerProperty accountIDProperty;
     
     public Account (BankQuery query, int holderID, int managerID, 
             String accountName, String type, String schema) {
@@ -44,6 +46,8 @@ public class Account {
         this.accountNameProperty = new SimpleStringProperty(accountName);
         this.typeProperty = new SimpleStringProperty(type);
         this.balanceProperty = new SimpleDoubleProperty(balance);
+        this.accountIDProperty = new SimpleIntegerProperty(ID);
+        
         
         System.out.println("Account created on: " + dateCreated.toString());
         
@@ -65,12 +69,17 @@ public class Account {
         this.accountNameProperty = new SimpleStringProperty(accountName);
         this.typeProperty = new SimpleStringProperty(type);
         this.balanceProperty = new SimpleDoubleProperty(balance);
+        this.accountIDProperty = new SimpleIntegerProperty(ID);
         
     }
     
        
     public int getID() {       
         return this.ID;      
+    }
+    
+    public SimpleIntegerProperty accountIDProperty() {
+        return this.accountIDProperty;
     }
     
     public double getBalance() {
