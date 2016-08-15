@@ -434,7 +434,16 @@ public class HomeBank extends Application {
                 debitAccountCol, transactionAmountCol, transactionDateCol,
                 transactionTimeCol);
         
-        //Currently just grabs first transaction list in array.
+        
+        //Properties:
+        SimpleIntegerProperty  accountTableSelection = 
+                new SimpleIntegerProperty(
+                        accountTable.getSelectionModel().getFocusedIndex());
+        
+        accountIDCol.getCellData(accountTableSelection.get());
+        //Bindings:       
+        
+//Currently just grabs first transaction list in array.
         //Need to implement a feature to pull transactions from currently
         //selected account.
         ObservableList<Transaction> tempTransList 
@@ -452,14 +461,6 @@ public class HomeBank extends Application {
         transactionVbox.setSpacing(3);
         transactionVbox.setPadding(new Insets(10, 0, 0, 10));
         transactionVbox.getChildren().addAll(transactionTable);
-        
-        //Properties:
-        SimpleIntegerProperty  accountTableSelection = 
-                new SimpleIntegerProperty(
-                        accountTable.getSelectionModel().getFocusedIndex());
-        
-        accountIDCol.getCellData(accountTableSelection.get());
-        //Bindings:
         
         //Grid setup:
         grid.setAlignment(Pos.CENTER);
